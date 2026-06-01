@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useLifestyleData, useLogLifestyle } from '../hooks';
-import { Coffee, Droplets, Moon, Zap, Plus, Minus, Clock, ChevronUp, ChevronDown } from 'lucide-react';
+import {
+  Coffee,
+  Droplets,
+  Moon,
+  Zap,
+  Plus,
+  Minus,
+  Clock,
+  ChevronUp,
+  ChevronDown,
+} from 'lucide-react';
 import styles from './LifestyleScorecard.module.css';
 
 export function LifestyleScorecard() {
@@ -26,6 +36,7 @@ export function LifestyleScorecard() {
   useEffect(() => {
     if (logs && logs.length > 0) {
       const dayLog = logs[0];
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCoffee(dayLog.coffee_cups);
       setWater(dayLog.water_cups);
       setBedtime24h(formatIsoTo24h(dayLog.bedtime));
@@ -61,19 +72,25 @@ export function LifestyleScorecard() {
   };
 
   // Safe time stepping utility (15 minute delta intervals)
-  const calculateTimeStep = (currentTime: string, deltaMinutes: number, fallback: string): string => {
+  const calculateTimeStep = (
+    currentTime: string,
+    deltaMinutes: number,
+    fallback: string,
+  ): string => {
     const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    let [hrs, mins] = timeRegex.test(currentTime) 
-      ? currentTime.split(':').map(Number) 
+    const [hrs, mins] = timeRegex.test(currentTime)
+      ? currentTime.split(':').map(Number)
       : fallback.split(':').map(Number);
 
     let totalMins = hrs * 60 + mins + deltaMinutes;
-    
+
     // Handle midnight wrapping bounds
     if (totalMins < 0) totalMins += 1440;
     if (totalMins >= 1440) totalMins %= 1440;
 
-    const newHrs = Math.floor(totalMins / 60).toString().padStart(2, '0');
+    const newHrs = Math.floor(totalMins / 60)
+      .toString()
+      .padStart(2, '0');
     const newMins = (totalMins % 60).toString().padStart(2, '0');
     return `${newHrs}:${newMins}`;
   };
@@ -82,8 +99,13 @@ export function LifestyleScorecard() {
   const handleTimeBlur = () => {
     const { bedIso, wakeIso } = runSmartInference(bedtime24h, wakeTime24h);
     logMutation.mutate({
-      date: today, coffee_cups: coffee, water_cups: water,
-      bedtime: bedIso, wake_time: wakeIso, sleep_quality: sleepQuality, energy_level: energyLevel
+      date: today,
+      coffee_cups: coffee,
+      water_cups: water,
+      bedtime: bedIso,
+      wake_time: wakeIso,
+      sleep_quality: sleepQuality,
+      energy_level: energyLevel,
     });
   };
 
@@ -104,12 +126,22 @@ export function LifestyleScorecard() {
     // Fire off immediate clean database upsert with fresh calculated time values
     const { bedIso, wakeIso } = runSmartInference(targetBed, targetWake);
     logMutation.mutate({
-      date: today, coffee_cups: coffee, water_cups: water,
-      bedtime: bedIso, wake_time: wakeIso, sleep_quality: sleepQuality, energy_level: energyLevel
+      date: today,
+      coffee_cups: coffee,
+      water_cups: water,
+      bedtime: bedIso,
+      wake_time: wakeIso,
+      sleep_quality: sleepQuality,
+      energy_level: energyLevel,
     });
   };
 
-  const saveQuickMetric = (updates: { coffee?: number; water?: number; quality?: number | null; energy?: number | null }) => {
+  const saveQuickMetric = (updates: {
+    coffee?: number;
+    water?: number;
+    quality?: number | null;
+    energy?: number | null;
+  }) => {
     const { bedIso, wakeIso } = runSmartInference(bedtime24h, wakeTime24h);
     logMutation.mutate({
       date: today,
@@ -142,7 +174,12 @@ export function LifestyleScorecard() {
         <div className={styles.controlGroup}>
           <button
             type="button"
-            onClick={() => { if (coffee > 0) { setCoffee(c => c - 1); saveQuickMetric({ coffee: coffee - 1 }); } }}
+            onClick={() => {
+              if (coffee > 0) {
+                setCoffee((c) => c - 1);
+                saveQuickMetric({ coffee: coffee - 1 });
+              }
+            }}
             className={styles.controlButton}
           >
             <Minus className="h-3.5 w-3.5" />
@@ -150,7 +187,10 @@ export function LifestyleScorecard() {
           <span className={styles.controlValue}>{coffee}</span>
           <button
             type="button"
-            onClick={() => { setCoffee(c => c + 1); saveQuickMetric({ coffee: coffee + 1 }); }}
+            onClick={() => {
+              setCoffee((c) => c + 1);
+              saveQuickMetric({ coffee: coffee + 1 });
+            }}
             className={styles.controlButton}
           >
             <Plus className="h-3.5 w-3.5" />
@@ -172,7 +212,12 @@ export function LifestyleScorecard() {
         <div className={styles.controlGroup}>
           <button
             type="button"
-            onClick={() => { if (water > 0) { setWater(w => w - 1); saveQuickMetric({ water: water - 1 }); } }}
+            onClick={() => {
+              if (water > 0) {
+                setWater((w) => w - 1);
+                saveQuickMetric({ water: water - 1 });
+              }
+            }}
             className={styles.controlButton}
           >
             <Minus className="h-3.5 w-3.5" />
@@ -180,7 +225,10 @@ export function LifestyleScorecard() {
           <span className={styles.controlValue}>{water}</span>
           <button
             type="button"
-            onClick={() => { setWater(w => w + 1); saveQuickMetric({ water: water + 1 }); }}
+            onClick={() => {
+              setWater((w) => w + 1);
+              saveQuickMetric({ water: water + 1 });
+            }}
             className={styles.controlButton}
           >
             <Plus className="h-3.5 w-3.5" />
@@ -219,10 +267,18 @@ export function LifestyleScorecard() {
                 className={styles.timeInput}
               />
               <div className={styles.stepperGroup}>
-                <button type="button" onClick={() => handleTimeStepClick('bed', 15)} className={styles.stepperButton}>
+                <button
+                  type="button"
+                  onClick={() => handleTimeStepClick('bed', 15)}
+                  className={styles.stepperButton}
+                >
                   <ChevronUp className="h-4 w-4" />
                 </button>
-                <button type="button" onClick={() => handleTimeStepClick('bed', -15)} className={styles.stepperButton}>
+                <button
+                  type="button"
+                  onClick={() => handleTimeStepClick('bed', -15)}
+                  className={styles.stepperButton}
+                >
                   <ChevronDown className="h-4 w-4" />
                 </button>
               </div>
@@ -244,10 +300,18 @@ export function LifestyleScorecard() {
                 className={styles.timeInput}
               />
               <div className={styles.stepperGroup}>
-                <button type="button" onClick={() => handleTimeStepClick('wake', 15)} className={styles.stepperButton}>
+                <button
+                  type="button"
+                  onClick={() => handleTimeStepClick('wake', 15)}
+                  className={styles.stepperButton}
+                >
                   <ChevronUp className="h-4 w-4" />
                 </button>
-                <button type="button" onClick={() => handleTimeStepClick('wake', -15)} className={styles.stepperButton}>
+                <button
+                  type="button"
+                  onClick={() => handleTimeStepClick('wake', -15)}
+                  className={styles.stepperButton}
+                >
                   <ChevronDown className="h-4 w-4" />
                 </button>
               </div>
@@ -267,7 +331,10 @@ export function LifestyleScorecard() {
             <button
               key={val}
               type="button"
-              onClick={() => { setSleepQuality(val); saveQuickMetric({ quality: val }); }}
+              onClick={() => {
+                setSleepQuality(val);
+                saveQuickMetric({ quality: val });
+              }}
               className={`${styles.ratingButton} ${sleepQuality === val ? styles.qualityActive : styles.ratingInactive}`}
             >
               {val}
@@ -287,7 +354,10 @@ export function LifestyleScorecard() {
             <button
               key={val}
               type="button"
-              onClick={() => { setEnergyLevel(val); saveQuickMetric({ energy: val }); }}
+              onClick={() => {
+                setEnergyLevel(val);
+                saveQuickMetric({ energy: val });
+              }}
               className={`${styles.ratingButton} ${energyLevel === val ? styles.energyActive : styles.ratingInactive}`}
             >
               {val}

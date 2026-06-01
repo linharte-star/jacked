@@ -26,7 +26,9 @@ export function MacroProgress({ targets, totals }: MacroProgressProps) {
         </div>
         <div className="text-right">
           <span className={styles.remainingLabel}>Remaining</span>
-          <span className={`${styles.remainingValue} ${remainingCals >= 0 ? styles.remainingPositive : styles.remainingNegative}`}>
+          <span
+            className={`${styles.remainingValue} ${remainingCals >= 0 ? styles.remainingPositive : styles.remainingNegative}`}
+          >
             {remainingCals} kcal
           </span>
         </div>
@@ -38,12 +40,15 @@ export function MacroProgress({ targets, totals }: MacroProgressProps) {
         <div className={styles.trackItem}>
           <div className={styles.trackHeader}>
             <span className={styles.trackLabel}>Protein</span>
-            <span className={styles.trackStats}>{totals.protein}g <span className={styles.trackTarget}>/ {targets.target_protein}g</span></span>
+            <span className={styles.trackStats}>
+              {totals.protein}g{' '}
+              <span className={styles.trackTarget}>/ {targets.target_protein}g</span>
+            </span>
           </div>
           <div className={styles.progressBar}>
-            <div 
-              style={{ width: `${calculatePercent(totals.protein, targets.target_protein)}%` }} 
-              className={`${styles.progressFill} ${styles.fillProtein}`} 
+            <div
+              style={{ width: `${calculatePercent(totals.protein, targets.target_protein)}%` }}
+              className={`${styles.progressFill} ${styles.fillProtein}`}
             />
           </div>
         </div>
@@ -52,12 +57,14 @@ export function MacroProgress({ targets, totals }: MacroProgressProps) {
         <div className={styles.trackItem}>
           <div className={styles.trackHeader}>
             <span className={styles.trackLabel}>Carbohydrates</span>
-            <span className={styles.trackStats}>{totals.carbs}g <span className={styles.trackTarget}>/ {targets.target_carbs}g</span></span>
+            <span className={styles.trackStats}>
+              {totals.carbs}g <span className={styles.trackTarget}>/ {targets.target_carbs}g</span>
+            </span>
           </div>
           <div className={styles.progressBar}>
-            <div 
-              style={{ width: `${calculatePercent(totals.carbs, targets.target_carbs)}%` }} 
-              className={`${styles.progressFill} ${styles.fillCarbs}`} 
+            <div
+              style={{ width: `${calculatePercent(totals.carbs, targets.target_carbs)}%` }}
+              className={`${styles.progressFill} ${styles.fillCarbs}`}
             />
           </div>
         </div>
@@ -66,12 +73,14 @@ export function MacroProgress({ targets, totals }: MacroProgressProps) {
         <div className={styles.trackItem}>
           <div className={styles.trackHeader}>
             <span className={styles.trackLabel}>Dietary Fats</span>
-            <span className={styles.trackStats}>{totals.fat}g <span className={styles.trackTarget}>/ {targets.target_fat}g</span></span>
+            <span className={styles.trackStats}>
+              {totals.fat}g <span className={styles.trackTarget}>/ {targets.target_fat}g</span>
+            </span>
           </div>
           <div className={styles.progressBar}>
-            <div 
-              style={{ width: `${calculatePercent(totals.fat, targets.target_fat)}%` }} 
-              className={`${styles.progressFill} ${styles.fillFat}`} 
+            <div
+              style={{ width: `${calculatePercent(totals.fat, targets.target_fat)}%` }}
+              className={`${styles.progressFill} ${styles.fillFat}`}
             />
           </div>
         </div>

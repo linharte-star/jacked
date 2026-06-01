@@ -1,10 +1,19 @@
 import { useState, useMemo } from 'react';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from 'recharts';
 import { parseLiftHistoryForChart } from '../chartSelectors';
+import { WorkoutHistoryItem } from '../types';
 import styles from './LiftingCharts.module.css';
 
 interface LiftingChartsProps {
-  history: any[];
+  history: WorkoutHistoryItem[];
 }
 
 const EXERCISES = ['Squat', 'Bench Press', 'Barbell Row', 'Overhead Press', 'Deadlift'];
@@ -51,20 +60,38 @@ export function LiftingCharts({ history }: LiftingChartsProps) {
           <div className={styles.emptyState}>
             <span className={styles.emptyTitle}>No data points logged yet</span>
             <span className={styles.emptyDesc}>
-              Complete all working sets of {selectedExercise} with exactly 5 repetitions to track progress.
+              Complete all working sets of {selectedExercise} with exactly 5 repetitions to track
+              progress.
             </span>
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 10, right: 15, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-              <XAxis dataKey="formattedDate" stroke="#a1a1aa" fontSize={10} tickLine={false} axisLine={false} />
-              <YAxis domain={yDomain} stroke="#a1a1aa" fontSize={10} tickLine={false} axisLine={false} />
+              <XAxis
+                dataKey="formattedDate"
+                stroke="#a1a1aa"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                domain={yDomain}
+                stroke="#a1a1aa"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+              />
               <Tooltip
-                contentStyle={{ backgroundColor: '#18181b', borderColor: '#3f3f46', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.5)' }}
+                contentStyle={{
+                  backgroundColor: '#18181b',
+                  borderColor: '#3f3f46',
+                  borderRadius: '12px',
+                  boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.5)',
+                }}
                 labelStyle={{ color: '#f4f4f5', fontSize: '11px', fontWeight: 700 }}
                 itemStyle={{ fontSize: '12px', color: '#10b981', fontWeight: 600 }}
-                formatter={(value: any) => [`${value} lbs`, 'Load']}
+                formatter={(value: string | number) => [`${value} lbs`, 'Load']}
               />
               <Line
                 type="monotone"
@@ -84,12 +111,15 @@ export function LiftingCharts({ history }: LiftingChartsProps) {
         <div className={styles.statsGrid}>
           <div className={styles.statsCard}>
             <span className={styles.statsLabel}>Current Working</span>
-            <p className={styles.statsValue}>{chartData[chartData.length - 1].weight} <span className={styles.statsUnit}>lbs</span></p>
+            <p className={styles.statsValue}>
+              {chartData[chartData.length - 1].weight} <span className={styles.statsUnit}>lbs</span>
+            </p>
           </div>
           <div className={styles.statsCard}>
             <span className={styles.statsLabel}>Historical Peak</span>
             <p className={styles.statsPeak}>
-              {Math.max(...chartData.map((d) => d.weight))} <span className={styles.statsUnit}>lbs</span>
+              {Math.max(...chartData.map((d) => d.weight))}{' '}
+              <span className={styles.statsUnit}>lbs</span>
             </p>
           </div>
         </div>

@@ -15,10 +15,18 @@ interface ScratchpadProps {
 }
 
 export function Scratchpad({
-  name, protein, carbs, fat,
-  onChangeName, onUpdateMacro, onSetMacro, onClear, onCommit, isPending
+  name,
+  protein,
+  carbs,
+  fat,
+  onChangeName,
+  onUpdateMacro,
+  onSetMacro,
+  onClear,
+  onCommit,
+  isPending,
 }: ScratchpadProps) {
-  const totalCalories = (protein * 4) + (carbs * 4) + (fat * 9);
+  const totalCalories = protein * 4 + carbs * 4 + fat * 9;
   const isDirty = protein > 0 || carbs > 0 || fat > 0 || name !== '';
 
   return (
@@ -33,13 +41,9 @@ export function Scratchpad({
           onChange={(e) => onChangeName(e.target.value)}
           className={styles.nameInput}
         />
-        
+
         {isDirty && (
-          <button
-            type="button"
-            onClick={onClear}
-            className={styles.resetButton}
-          >
+          <button type="button" onClick={onClear} className={styles.resetButton}>
             <RotateCcw className="h-2.5 w-2.5" />
             <span>Reset</span>
           </button>
@@ -49,13 +53,31 @@ export function Scratchpad({
       {/* Grid containing high-fidelity numerical cell wrappers */}
       <div className={styles.grid}>
         {[
-          { key: 'protein' as const, label: 'Protein', val: protein, inputClass: styles.inputProtein, cardClass: styles.cardProtein },
-          { key: 'carbs' as const, label: 'Carbs', val: carbs, inputClass: styles.inputCarbs, cardClass: styles.cardCarbs },
-          { key: 'fat' as const, label: 'Fats', val: fat, inputClass: styles.inputFat, cardClass: styles.cardFat },
+          {
+            key: 'protein' as const,
+            label: 'Protein',
+            val: protein,
+            inputClass: styles.inputProtein,
+            cardClass: styles.cardProtein,
+          },
+          {
+            key: 'carbs' as const,
+            label: 'Carbs',
+            val: carbs,
+            inputClass: styles.inputCarbs,
+            cardClass: styles.cardCarbs,
+          },
+          {
+            key: 'fat' as const,
+            label: 'Fats',
+            val: fat,
+            inputClass: styles.inputFat,
+            cardClass: styles.cardFat,
+          },
         ].map((m) => (
           <div key={m.key} className={`${styles.macroCard} ${m.cardClass}`}>
             <span className={styles.macroLabel}>{m.label}</span>
-            
+
             {/* Inline Dynamic Numerical Input Block */}
             <div className={styles.inputBlock}>
               <input

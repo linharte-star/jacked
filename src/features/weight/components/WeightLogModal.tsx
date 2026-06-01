@@ -26,7 +26,7 @@ export function WeightLogModal({ isOpen, onClose }: WeightLogModalProps) {
           setWeight('');
           onClose();
         },
-      }
+      },
     );
   };
 

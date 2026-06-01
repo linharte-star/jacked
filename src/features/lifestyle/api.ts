@@ -5,7 +5,7 @@ export interface LifestyleLog {
   date: string;
   coffee_cups: number;
   water_cups: number;
-  bedtime: string | null;  // ISO Timestamps handled as strings via JSON
+  bedtime: string | null; // ISO Timestamps handled as strings via JSON
   wake_time: string | null; // ISO Timestamps handled as strings via JSON
   sleep_quality: number | null;
   energy_level: number | null;
@@ -25,16 +25,15 @@ export const lifestyleApi = {
   },
 
   async upsert(log: Omit<LifestyleLog, 'id'>): Promise<void> {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error('Unauthenticated lifestyle mutation query');
 
     const { error } = await supabase
       .from('lifestyle_logs')
-      .upsert(
-        { user_id: user.id, ...log },
-        { onConflict: 'user_id, date' }
-      );
+      .upsert({ user_id: user.id, ...log }, { onConflict: 'user_id, date' });
 
     if (error) throw new Error(error.message);
-  }
+  },
 };

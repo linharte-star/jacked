@@ -6,23 +6,23 @@ A mobile-first, zero-overhead private Progressive Web App (PWA) engineered to tr
 
 ## 🚀 Features
 
-*   **Lifting Engine:** Automates the StrongLifts 5x5 linear progression framework with real-time set tracking and progression charts.
-*   **Weight Ledger:** Track body composition trends with daily logs and 7-day moving averages.
-*   **Food & Macros:** Granular macro tracking with a "scratchpad" for quick entries, staples bank for frequent items, and target goal management.
-*   **Lifestyle Scorecard:** Monitor recovery variables including sleep quality, energy levels, coffee intake, and hydration.
-*   **Private & Secure:** Built on Supabase with Row Level Security (RLS) to ensure your data is yours alone.
-*   **Offline Ready:** PWA capabilities for a native-like experience on iOS and Android.
+- **Lifting Engine:** Automates the StrongLifts 5x5 linear progression framework with real-time set tracking and progression charts.
+- **Weight Ledger:** Track body composition trends with daily logs and 7-day moving averages.
+- **Food & Macros:** Granular macro tracking with a "scratchpad" for quick entries, staples bank for frequent items, and target goal management.
+- **Lifestyle Scorecard:** Monitor recovery variables including sleep quality, energy levels, coffee intake, and hydration.
+- **Private & Secure:** Built on Supabase with Row Level Security (RLS) to ensure your data is yours alone.
+- **Offline Ready:** PWA capabilities for a native-like experience on iOS and Android.
 
 ---
 
 ## 🛠 Tech Stack & Architecture
 
-*   **Frontend Framework:** React 19 (Vite) + TypeScript (Strict Mode)
-*   **Styling Engine:** Tailwind CSS v4 (Native Vite Compiler Toolchain)
-*   **Data Architecture & Cache Engine:** TanStack Query v5 (React Query)
-*   **Backend & Database Layer:** PostgreSQL via Supabase (RLS Enabled)
-*   **Data Visualization:** Recharts (Responsive SVG Configuration)
-*   **Iconography:** Lucide React
+- **Frontend Framework:** React 19 (Vite) + TypeScript (Strict Mode)
+- **Styling Engine:** Tailwind CSS v4 (Native Vite Compiler Toolchain)
+- **Data Architecture & Cache Engine:** TanStack Query v5 (React Query)
+- **Backend & Database Layer:** PostgreSQL via Supabase (RLS Enabled)
+- **Data Visualization:** Recharts (Responsive SVG Configuration)
+- **Iconography:** Lucide React
 
 ---
 
@@ -59,12 +59,14 @@ src/
 ### Setup
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Configure environment:
    Create a `.env` file with your Supabase credentials:
+
    ```env
    VITE_SUPABASE_URL=your_project_url
    VITE_SUPABASE_ANON_KEY=your_anon_key
@@ -78,6 +80,7 @@ src/
 ### Database Types
 
 To update Supabase types run:
+
 ```bash
 npx supabase gen types typescript --project-id "bocnauzbkqtomnjvcxlq" > src/types/supabase.ts
 ```

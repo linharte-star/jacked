@@ -33,7 +33,7 @@ export function ExerciseCard({ exercise, onUpdateSet, onUpdateWeight }: Exercise
     <div className={styles.card}>
       <div className={styles.header}>
         <h3 className={styles.title}>{exercise.exercise_name}</h3>
-        
+
         {/* Interactive Weight Matrix Toggle */}
         {isEditing ? (
           <div className={styles.editWrapper}>
@@ -52,16 +52,12 @@ export function ExerciseCard({ exercise, onUpdateSet, onUpdateWeight }: Exercise
             <span className={styles.unit}>lbs</span>
           </div>
         ) : (
-          <button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className={styles.weightDisplay}
-          >
+          <button type="button" onClick={() => setIsEditing(true)} className={styles.weightDisplay}>
             {exercise.target_weight} lbs
           </button>
         )}
       </div>
-      
+
       <div className={styles.setGrid}>
         {exercise.sets.map((set, idx) => (
           <SetCircle key={idx} set={set} onToggle={() => onUpdateSet(idx)} />

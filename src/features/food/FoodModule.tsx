@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { useFoodData, useLogFood, useManageStaples, useDeleteFoodItem, useUpdateTargets, useDeleteStaple } from './hooks';
+import {
+  useFoodData,
+  useLogFood,
+  useManageStaples,
+  useDeleteFoodItem,
+  useUpdateTargets,
+  useDeleteStaple,
+} from './hooks';
 import { MacroProgress } from './components/MacroProgress';
 import { Scratchpad } from './components/Scratchpad';
 import { StaplesBank } from './components/StaplesBank';
@@ -22,16 +29,29 @@ export function FoodModule() {
   const [scratchCarbs, setScratchCarbs] = useState(0);
   const [scratchFat, setScratchFat] = useState(0);
 
-  if (isLoading) return <div className="text-zinc-500 text-xs text-center py-12 font-mono">Loading macro ledger logs...</div>;
-  if (error || !targets) return <div className="text-red-400 text-xs text-center py-12">Failed mapping goals profile index.</div>;
+  if (isLoading)
+    return (
+      <div className="text-zinc-500 text-xs text-center py-12 font-mono">
+        Loading macro ledger logs...
+      </div>
+    );
+  if (error || !targets)
+    return (
+      <div className="text-red-400 text-xs text-center py-12">
+        Failed mapping goals profile index.
+      </div>
+    );
 
-  const totals = logs.reduce((acc, curr) => {
-    acc.protein += curr.protein;
-    acc.carbs += curr.carbs;
-    acc.fat += curr.fat;
-    acc.calories += curr.calories;
-    return acc;
-  }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  const totals = logs.reduce(
+    (acc, curr) => {
+      acc.protein += curr.protein;
+      acc.carbs += curr.carbs;
+      acc.fat += curr.fat;
+      acc.calories += curr.calories;
+      return acc;
+    },
+    { calories: 0, protein: 0, carbs: 0, fat: 0 },
+  );
 
   const clearScratchpad = () => {
     setScratchName('');
@@ -42,9 +62,9 @@ export function FoodModule() {
 
   // 🔥 Granular 1g stepper adjuster logic
   const handleUpdateMacro = (macro: 'protein' | 'carbs' | 'fat', delta: number) => {
-    if (macro === 'protein') setScratchProtein(p => Math.max(0, p + delta));
-    if (macro === 'carbs') setScratchCarbs(c => Math.max(0, c + delta));
-    if (macro === 'fat') setScratchFat(f => Math.max(0, f + delta));
+    if (macro === 'protein') setScratchProtein((p) => Math.max(0, p + delta));
+    if (macro === 'carbs') setScratchCarbs((c) => Math.max(0, c + delta));
+    if (macro === 'fat') setScratchFat((f) => Math.max(0, f + delta));
   };
 
   // 🔥 Direct keypad keyboard absolute typewriter handler
@@ -56,17 +76,20 @@ export function FoodModule() {
   };
 
   const handleCommitLog = () => {
-    const calculatedCals = (scratchProtein * 4) + (scratchCarbs * 4) + (scratchFat * 9);
-    
-    logFoodMutation.mutate({
-      food_name: scratchName.trim() || 'Quick Macro Entry',
-      protein: scratchProtein,
-      carbs: scratchCarbs,
-      fat: scratchFat,
-      calories: calculatedCals
-    }, {
-      onSuccess: () => clearScratchpad()
-    });
+    const calculatedCals = scratchProtein * 4 + scratchCarbs * 4 + scratchFat * 9;
+
+    logFoodMutation.mutate(
+      {
+        food_name: scratchName.trim() || 'Quick Macro Entry',
+        protein: scratchProtein,
+        carbs: scratchCarbs,
+        fat: scratchFat,
+        calories: calculatedCals,
+      },
+      {
+        onSuccess: () => clearScratchpad(),
+      },
+    );
   };
 
   return (
@@ -75,7 +98,8 @@ export function FoodModule() {
         <div className={styles.header}>
           <h4 className={styles.headerText}>Daily Dashboard</h4>
           <button
-            type="button" onClick={() => setModalOpen(true)}
+            type="button"
+            onClick={() => setModalOpen(true)}
             className={styles.editTargetsButton}
           >
             <Settings className="h-3.5 w-3.5" />
@@ -116,7 +140,7 @@ export function FoodModule() {
       />
 
       <div className={styles.section}>
-        <h4 className={styles.ledgerHeader}>Today's Log Ledger</h4>
+        <h4 className={styles.ledgerHeader}>Today&apos;s Log Ledger</h4>
         <div className={styles.ledgerList}>
           {logs.length === 0 ? (
             <div className={styles.emptyLedger}>No entries accounted for today.</div>
@@ -132,7 +156,8 @@ export function FoodModule() {
                 <div className="flex items-center gap-3">
                   <span className={styles.itemCalories}>{item.calories} kcal</span>
                   <button
-                    type="button" onClick={() => deleteItemMutation.mutate(item.id)}
+                    type="button"
+                    onClick={() => deleteItemMutation.mutate(item.id)}
                     className={styles.deleteButton}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -145,8 +170,10 @@ export function FoodModule() {
       </div>
 
       <TargetSettingsModal
-        isOpen={modalOpen} onClose={() => setModalOpen(false)}
-        currentTargets={targets} onSave={(newTargets) => updateTargetsMutation.mutate(newTargets)}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        currentTargets={targets}
+        onSave={(newTargets) => updateTargetsMutation.mutate(newTargets)}
         isSaving={updateTargetsMutation.isPending}
       />
     </div>

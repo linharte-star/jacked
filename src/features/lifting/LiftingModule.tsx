@@ -10,12 +10,16 @@ export function LiftingModule() {
   const { data: engineSetup, isLoading: engineLoading } = useStrongLiftsEngine(history);
   const logWorkoutMutation = useLogWorkout();
 
-  const [workoutIsActive, setWorkoutIsActive] = useState(() => 
-    localStorage.getItem('active_workout_session') !== null
+  const [workoutIsActive, setWorkoutIsActive] = useState(
+    () => localStorage.getItem('active_workout_session') !== null,
   );
 
   if (historyLoading || engineLoading) {
-    return <div className="text-zinc-500 text-xs text-center py-12 font-mono">Parsing historical lifting patterns...</div>;
+    return (
+      <div className="text-zinc-500 text-xs text-center py-12 font-mono">
+        Parsing historical lifting patterns...
+      </div>
+    );
   }
 
   const handleCancel = () => {
@@ -34,7 +38,7 @@ export function LiftingModule() {
           isSaving={logWorkoutMutation.isPending}
           onSave={(session) => {
             logWorkoutMutation.mutate(session, {
-              onSuccess: () => setWorkoutIsActive(false)
+              onSuccess: () => setWorkoutIsActive(false),
             });
           }}
         />
@@ -42,10 +46,7 @@ export function LiftingModule() {
         engineSetup && (
           <>
             {/* Top Component Section: Setup & Initialize Button */}
-            <WorkoutSetup
-              session={engineSetup}
-              onStart={() => setWorkoutIsActive(true)}
-            />
+            <WorkoutSetup session={engineSetup} onStart={() => setWorkoutIsActive(true)} />
 
             {/* Visual Separation Divider */}
             <hr className={styles.divider} />

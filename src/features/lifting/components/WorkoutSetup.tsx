@@ -15,9 +15,7 @@ export function WorkoutSetup({ session, onStart }: WorkoutSetupProps) {
           <Dumbbell className="h-6 w-6" />
         </div>
         <h2 className={styles.heroTitle}>StrongLifts 5x5 Matrix</h2>
-        <p className={styles.heroDesc}>
-          Next workout weights shown
-        </p>
+        <p className={styles.heroDesc}>Next workout weights shown</p>
       </div>
 
       <div className={styles.sessionSection}>
@@ -25,16 +23,14 @@ export function WorkoutSetup({ session, onStart }: WorkoutSetupProps) {
         {session.exercises.map((ex) => (
           <div key={ex.exercise_name} className={styles.exerciseRow}>
             <span className={styles.exName}>{ex.exercise_name}</span>
-            <span className={styles.exTarget}>{ex.target_weight} lbs <span className={styles.exSub}>x {ex.sets.length} sets</span></span>
+            <span className={styles.exTarget}>
+              {ex.target_weight} lbs <span className={styles.exSub}>x {ex.sets.length} sets</span>
+            </span>
           </div>
         ))}
       </div>
 
-      <button
-        type="button"
-        onClick={onStart}
-        className={styles.startBtn}
-      >
+      <button type="button" onClick={onStart} className={styles.startBtn}>
         <Play className="h-4 w-4 fill-current" />
         <span>Initialize Workout {session.workout_type}</span>
       </button>

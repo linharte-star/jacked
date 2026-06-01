@@ -24,7 +24,7 @@ export function ActiveWorkout({ initialSession, onCancel, onSave, isSaving }: Ac
   }, [session]);
 
   useEffect(() => {
-    const interval = setInterval(() => setSeconds(s => s + 1), 1000);
+    const interval = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -36,18 +36,18 @@ export function ActiveWorkout({ initialSession, onCancel, onSave, isSaving }: Ac
   };
 
   const handleUpdateWeight = (exIdx: number, newWeight: number) => {
-  setSession(prev => {
-    const nextEx = [...prev.exercises];
-    nextEx[exIdx] = {
-      ...nextEx[exIdx],
-      target_weight: newWeight
-    };
-    return { ...prev, exercises: nextEx };
-  });
-};
+    setSession((prev) => {
+      const nextEx = [...prev.exercises];
+      nextEx[exIdx] = {
+        ...nextEx[exIdx],
+        target_weight: newWeight,
+      };
+      return { ...prev, exercises: nextEx };
+    });
+  };
 
   const handleToggleSet = (exIdx: number, setIdx: number) => {
-    setSession(prev => {
+    setSession((prev) => {
       const nextEx = [...prev.exercises];
       const targetSet = { ...nextEx[exIdx].sets[setIdx] };
 
@@ -61,7 +61,10 @@ export function ActiveWorkout({ initialSession, onCancel, onSave, isSaving }: Ac
         targetSet.logged_reps = 5;
       }
 
-      nextEx[exIdx] = { ...nextEx[exIdx], sets: nextEx[exIdx].sets.map((s, i) => i === setIdx ? targetSet : s) };
+      nextEx[exIdx] = {
+        ...nextEx[exIdx],
+        sets: nextEx[exIdx].sets.map((s, i) => (i === setIdx ? targetSet : s)),
+      };
       return { ...prev, exercises: nextEx };
     });
   };
@@ -74,9 +77,7 @@ export function ActiveWorkout({ initialSession, onCancel, onSave, isSaving }: Ac
           <Timer className={styles.timerIcon} />
           <span className={styles.timerText}>{formatTime(seconds)}</span>
         </div>
-        <span className={styles.statusBadge}>
-          Workout {session.workout_type} Active
-        </span>
+        <span className={styles.statusBadge}>Workout {session.workout_type} Active</span>
       </div>
 
       {/* Primary Exercise Map Matrix */}
@@ -93,11 +94,7 @@ export function ActiveWorkout({ initialSession, onCancel, onSave, isSaving }: Ac
 
       {/* Lower Termination Control Options */}
       <div className={styles.actionRow}>
-        <button
-          type="button"
-          onClick={onCancel}
-          className={styles.cancelBtn}
-        >
+        <button type="button" onClick={onCancel} className={styles.cancelBtn}>
           <Trash2 className="h-4 w-4" />
         </button>
         <button

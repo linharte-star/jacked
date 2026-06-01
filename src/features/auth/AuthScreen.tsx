@@ -37,7 +37,6 @@ export function AuthScreen() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        
         {/* Branding Head */}
         <div className={styles.branding}>
           <div className={styles.iconWrapper}>
@@ -87,11 +86,7 @@ export function AuthScreen() {
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={styles.submitButton}
-          >
+          <button type="submit" disabled={loading} className={styles.submitButton}>
             {loading ? 'Processing...' : isSignUp ? 'Create Private Account' : 'Sign In'}
           </button>
         </form>
@@ -106,7 +101,6 @@ export function AuthScreen() {
             {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
           </button>
         </div>
-
       </div>
     </div>
   );

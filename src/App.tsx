@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Dumbbell, LineChart, Apple, Zap } from 'lucide-react';
-import {AuthScreen} from './features/auth/AuthScreen';
+import { AuthScreen } from './features/auth/AuthScreen';
 import { WeightModule } from './features/weight/WeightModule';
 import { LiftingModule } from './features/lifting/LiftingModule';
 import { FoodModule } from './features/food/FoodModule';
@@ -28,13 +28,13 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ProtectedRoute fallback={<AuthScreen />}>
-          
           {/* Main Mobile Shell Layout */}
           <div className={styles.shell}>
-            
             {/* View Container Area */}
             <main className={styles.main}>
-              {activeTab === 'dashboard' && <WeightModule />}
+              {activeTab === 'dashboard' && (
+                <WeightModule onNavigateToLift={() => setActiveTab('lifting')} />
+              )}
               {activeTab === 'lifting' && <LiftingModule />}
               {activeTab === 'food' && <FoodModule />}
               {activeTab === 'analytics' && <div>Recharts Visualizations</div>}
@@ -43,28 +43,28 @@ export default function App() {
             {/* Mobile Bottom Navigation Bar (PWA Form Factor) */}
             <nav className={`pb-safe ${styles.nav}`}>
               <div className={styles.navContainer}>
-                <button 
+                <button
                   onClick={() => setActiveTab('dashboard')}
                   className={`${styles.navButton} ${activeTab === 'dashboard' ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
                   <Zap className={styles.navIcon} />
                   <span>Log</span>
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('lifting')}
                   className={`${styles.navButton} ${activeTab === 'lifting' ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
                   <Dumbbell className={styles.navIcon} />
                   <span>Lift</span>
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('food')}
                   className={`${styles.navButton} ${activeTab === 'food' ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
                   <Apple className={styles.navIcon} />
                   <span>Food</span>
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('analytics')}
                   className={`${styles.navButton} ${activeTab === 'analytics' ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
@@ -73,7 +73,6 @@ export default function App() {
                 </button>
               </div>
             </nav>
-
           </div>
         </ProtectedRoute>
       </AuthProvider>

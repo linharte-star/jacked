@@ -1,4 +1,4 @@
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/auth';
 import styles from './ProtectedRoute.module.css';
 
 interface ProtectedRouteProps {
