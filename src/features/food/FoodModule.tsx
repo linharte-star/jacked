@@ -5,6 +5,7 @@ import { Scratchpad } from './components/Scratchpad';
 import { StaplesBank } from './components/StaplesBank';
 import { TargetSettingsModal } from './components/TargetSettingsModal';
 import { Trash2, Settings } from 'lucide-react';
+import styles from './FoodModule.module.css';
 
 export function FoodModule() {
   const { targets, logs, staples, isLoading, error } = useFoodData();
@@ -69,13 +70,13 @@ export function FoodModule() {
   };
 
   return (
-    <div className="space-y-6 pb-12">
-      <div className="space-y-3">
-        <div className="flex items-center justify-between pl-0.5">
-          <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Daily Dashboard</h4>
+    <div className={styles.container}>
+      <div className={styles.section}>
+        <div className={styles.header}>
+          <h4 className={styles.headerText}>Daily Dashboard</h4>
           <button
             type="button" onClick={() => setModalOpen(true)}
-            className="text-xs font-bold text-zinc-500 hover:text-zinc-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+            className={styles.editTargetsButton}
           >
             <Settings className="h-3.5 w-3.5" />
             <span>Edit Targets</span>
@@ -114,25 +115,25 @@ export function FoodModule() {
         }}
       />
 
-      <div className="space-y-2">
-        <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider pl-0.5">Today's Log Ledger</h4>
-        <div className="space-y-1.5 max-h-[180px] overflow-y-auto pr-1">
+      <div className={styles.section}>
+        <h4 className={styles.ledgerHeader}>Today's Log Ledger</h4>
+        <div className={styles.ledgerList}>
           {logs.length === 0 ? (
-            <div className="text-center py-6 border border-dashed border-zinc-900 rounded-xl text-zinc-600 text-xs">No entries accounted for today.</div>
+            <div className={styles.emptyLedger}>No entries accounted for today.</div>
           ) : (
             [...logs].reverse().map((item) => (
-              <div key={item.id} className="flex items-center justify-between rounded-xl border border-zinc-900 bg-zinc-900/20 p-3 animate-in fade-in duration-100">
+              <div key={item.id} className={styles.ledgerItem}>
                 <div>
-                  <p className="text-xs font-semibold text-zinc-200">{item.food_name}</p>
-                  <p className="text-[10px] font-mono font-medium text-zinc-500 pt-0.5">
+                  <p className={styles.itemTitle}>{item.food_name}</p>
+                  <p className={styles.itemMacros}>
                     {item.protein}g P · {item.carbs}g C · {item.fat}g F
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs font-bold text-zinc-400">{item.calories} kcal</span>
+                  <span className={styles.itemCalories}>{item.calories} kcal</span>
                   <button
                     type="button" onClick={() => deleteItemMutation.mutate(item.id)}
-                    className="text-zinc-600 hover:text-red-400 p-1 rounded-md transition-colors active:scale-90"
+                    className={styles.deleteButton}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>

@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { LifestyleScorecard } from '../lifestyle/components/LifestyleScorecard';
 import { Scale, CheckCircle2, RefreshCw } from 'lucide-react';
+import styles from './WeightModule.module.css';
 
 export function WeightModule() {
   const queryClient = useQueryClient();
@@ -65,30 +66,29 @@ export function WeightModule() {
   if (error) return <div className="text-red-400 text-xs text-center py-12">Connection fault: {error.message}</div>;
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className={styles.container}>
       
       {/* 1. Command Center Section Header */}
-      <div className="pl-0.5">
-        <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Daily Entry Workspace</h4>
+      <div className={styles.header}>
+        <h4 className={styles.headerText}>Daily Entry Workspace</h4>
       </div>
 
       {/* 2. Seamless Inline Weight Capture Card */}
-      <div className="rounded-2xl border border-zinc-900 bg-zinc-900/10 p-4 backdrop-blur-md flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-xl transition-colors
-            ${todayLog ? 'bg-emerald-500/10 text-emerald-400' : 'bg-zinc-900 text-zinc-500'}`}
+      <div className={styles.weightCard}>
+        <div className={styles.cardInfo}>
+          <div className={`${styles.iconWrapper} ${todayLog ? styles.iconWrapperActive : styles.iconWrapperInactive}`}
           >
             <Scale className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-xs font-bold text-zinc-200">Morning Weight</p>
-            <p className="text-[10px] text-zinc-500">
+            <p className={styles.cardTitle}>Morning Weight</p>
+            <p className={styles.cardSubtitle}>
               {todayLog ? 'Logged successfully for today' : 'Awaiting scale metrics entry...'}
             </p>
           </div>
         </div>
 
-        <div className="relative flex items-center bg-zinc-950 border border-zinc-900 rounded-xl px-2.5 max-w-[120px] focus-within:border-zinc-800">
+        <div className={styles.inputGroup}>
           <input
             type="number"
             step="0.1"
@@ -99,16 +99,16 @@ export function WeightModule() {
             onChange={(e) => setWeightInput(e.target.value)}
             onBlur={handleWeightBlur}
             onKeyDown={handleKeyDown}
-            className="w-full bg-transparent text-right font-mono text-sm font-bold text-zinc-100 outline-none pr-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className={styles.weightInput}
           />
-          <span className="text-[10px] font-bold text-zinc-600 select-none pr-1">lbs</span>
+          <span className={styles.unitLabel}>lbs</span>
           
           {/* Reactive Status Spinner/Icon Indicators inside the slot */}
-          <div className="absolute left-2 text-zinc-600 pointer-events-none">
+          <div className={styles.statusIndicator}>
             {isSaving ? (
-              <RefreshCw className="h-3 w-3 animate-spin text-emerald-400" />
+              <RefreshCw className={`${styles.statusIcon} ${styles.loadingSpinner}`} />
             ) : todayLog ? (
-              <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+              <CheckCircle2 className={`${styles.statusIcon} ${styles.successIcon}`} />
             ) : null}
           </div>
         </div>

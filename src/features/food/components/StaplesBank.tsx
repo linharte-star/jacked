@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FoodStaple } from '../api';
 import { Plus, BookmarkPlus, SlidersHorizontal, Trash2 } from 'lucide-react';
+import styles from './StaplesBank.module.css';
 
 interface StaplesBankProps {
   staples: FoodStaple[];
@@ -33,15 +34,14 @@ export function StaplesBank({ staples, onSelectStaple, onCreateStaple, onDeleteS
   };
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between pl-0.5">
-        <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Meal Staples Bank</h4>
-        <div className="flex items-center gap-3">
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h4 className={styles.headerText}>Meal Staples Bank</h4>
+        <div className={styles.actions}>
           <button
             type="button"
             onClick={() => { setIsManageMode(!isManageMode); if (isOpen) setIsOpen(false); }}
-            className={`text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer
-              ${isManageMode ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-400'}`}
+            className={`${styles.manageBtn} ${isManageMode ? styles.manageBtnActive : styles.manageBtnInactive}`}
           >
             <SlidersHorizontal className="h-3 w-3" />
             <span>{isManageMode ? 'Done' : 'Manage'}</span>
@@ -50,7 +50,7 @@ export function StaplesBank({ staples, onSelectStaple, onCreateStaple, onDeleteS
           <button
             type="button"
             onClick={() => { setIsOpen(!isOpen); if (isManageMode) setIsManageMode(false); }}
-            className="text-xs font-bold text-emerald-400 flex items-center gap-1 hover:text-emerald-300 cursor-pointer"
+            className={styles.createBtn}
           >
             <BookmarkPlus className="h-3.5 w-3.5" />
             <span>Create Preset</span>
@@ -59,26 +59,26 @@ export function StaplesBank({ staples, onSelectStaple, onCreateStaple, onDeleteS
       </div>
 
       {isOpen && (
-        <form onSubmit={handleCreate} className="p-4 rounded-xl border border-zinc-900 bg-zinc-900/40 space-y-3 animate-in slide-in-from-top-2 duration-150">
+        <form onSubmit={handleCreate} className={styles.form}>
           <input
             type="text" required placeholder="Preset Label (e.g., Post-Workout Shake)" value={label}
             onChange={(e) => setLabel(e.target.value)}
-            className="w-full text-xs font-semibold rounded-lg border border-zinc-800 bg-zinc-950 p-2.5 text-zinc-200 outline-none focus:border-emerald-500/50"
+            className={styles.labelInput}
           />
-          <div className="grid grid-cols-3 gap-2">
-            <input type="number" placeholder="P (g)" value={p} onChange={(e) => setP(e.target.value)} className="w-full text-center font-mono text-xs border border-zinc-800 bg-zinc-950 p-2 rounded-lg text-zinc-100 outline-none" />
-            <input type="number" placeholder="C (g)" value={c} onChange={(e) => setC(e.target.value)} className="w-full text-center font-mono text-xs border border-zinc-800 bg-zinc-950 p-2 rounded-lg text-zinc-100 outline-none" />
-            <input type="number" placeholder="F (g)" value={f} onChange={(e) => setF(e.target.value)} className="w-full text-center font-mono text-xs border border-zinc-800 bg-zinc-950 p-2 rounded-lg text-zinc-100 outline-none" />
+          <div className={styles.macroGrid}>
+            <input type="number" placeholder="P (g)" value={p} onChange={(e) => setP(e.target.value)} className={styles.macroInput} />
+            <input type="number" placeholder="C (g)" value={c} onChange={(e) => setC(e.target.value)} className={styles.macroInput} />
+            <input type="number" placeholder="F (g)" value={f} onChange={(e) => setF(e.target.value)} className={styles.macroInput} />
           </div>
-          <button type="submit" className="w-full rounded-xl bg-zinc-100 py-2 text-xs font-bold text-zinc-950 hover:bg-zinc-200 transition-colors">
+          <button type="submit" className={styles.submitBtn}>
             Add Preset to Bank
           </button>
         </form>
       )}
 
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4">
+      <div className={styles.staplesRow}>
         {staples.length === 0 ? (
-          <span className="text-[11px] text-zinc-600 pl-0.5 py-1">No presets found.</span>
+          <span className={styles.emptyState}>No presets found.</span>
         ) : (
           staples.map((s) => (
             <button
@@ -86,20 +86,16 @@ export function StaplesBank({ staples, onSelectStaple, onCreateStaple, onDeleteS
               type="button"
               disabled={isManageMode && logInFlight}
               onClick={() => isManageMode ? onDeleteStaple(s.id) : onSelectStaple(s)}
-              className={`shrink-0 flex items-center gap-2 border py-2 px-3 rounded-xl transition-all active:scale-95 text-left
-                ${isManageMode 
-                  ? 'border-amber-500/20 bg-amber-500/[0.02] text-amber-400 hover:bg-red-500/5 hover:border-red-500/30 hover:text-red-400' 
-                  : 'border-zinc-900 bg-zinc-900/40 text-zinc-300'
-                }`}
+              className={`${styles.stapleBtn} ${isManageMode ? styles.stapleBtnManage : styles.stapleBtnRegular}`}
             >
               {isManageMode ? (
-                <Trash2 className="h-3.5 w-3.5 text-amber-500 hover:text-red-400 shrink-0" />
+                <Trash2 className={styles.iconTrash} />
               ) : (
-                <Plus className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                <Plus className={styles.iconPlus} />
               )}
               <div>
-                <p className="text-xs font-semibold leading-tight">{s.label}</p>
-                <p className="text-[9px] font-mono font-medium text-zinc-500 pt-0.5">
+                <p className={styles.stapleLabel}>{s.label}</p>
+                <p className={styles.stapleMacros}>
                   {s.protein}P · {s.carbs}C · {s.fat}F
                 </p>
               </div>

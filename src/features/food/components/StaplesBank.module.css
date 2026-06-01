@@ -1,0 +1,89 @@
+@reference "../../../index.css";
+
+.container {
+  @apply space-y-3;
+}
+
+.header {
+  @apply flex items-center justify-between pl-0.5;
+}
+
+.headerText {
+  @apply text-xs font-semibold text-zinc-400 uppercase tracking-wider;
+}
+
+.actions {
+  @apply flex items-center gap-3;
+}
+
+.manageBtn {
+  @apply text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer;
+}
+
+.manageBtnActive {
+  @apply text-amber-400;
+}
+
+.manageBtnInactive {
+  @apply text-zinc-400 hover:text-zinc-200;
+}
+
+.createBtn {
+  @apply text-xs font-bold text-emerald-400 flex items-center gap-1 hover:text-emerald-300 cursor-pointer;
+}
+
+.form {
+  @apply p-4 rounded-xl border border-zinc-800 bg-zinc-900 space-y-3 shadow-sm;
+}
+
+.labelInput {
+  @apply w-full text-xs font-semibold rounded-lg border border-zinc-800 bg-zinc-950 p-2.5 text-zinc-100 outline-none focus:border-emerald-500/50;
+}
+
+.macroGrid {
+  @apply grid grid-cols-3 gap-2;
+}
+
+.macroInput {
+  @apply w-full text-center font-mono text-xs border border-zinc-800 bg-zinc-950 p-2 rounded-lg text-zinc-100 outline-none;
+}
+
+.submitBtn {
+  @apply w-full rounded-xl bg-zinc-100 py-2 text-xs font-bold text-zinc-950 hover:bg-zinc-200 transition-colors;
+}
+
+.staplesRow {
+  @apply flex gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4;
+}
+
+.emptyState {
+  @apply text-[11px] text-zinc-500 pl-0.5 py-1;
+}
+
+.stapleBtn {
+  @apply shrink-0 flex items-center gap-2 border py-2 px-3 rounded-xl transition-all active:scale-95 text-left shadow-sm;
+}
+
+.stapleBtnManage {
+  @apply border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400;
+}
+
+.stapleBtnRegular {
+  @apply border-zinc-800 bg-zinc-900 text-zinc-200;
+}
+
+.iconPlus {
+  @apply h-3.5 w-3.5 text-emerald-400 shrink-0;
+}
+
+.iconTrash {
+  @apply h-3.5 w-3.5 text-amber-500 hover:text-red-400 shrink-0;
+}
+
+.stapleLabel {
+  @apply text-xs font-semibold leading-tight;
+}
+
+.stapleMacros {
+  @apply text-[9px] font-mono font-medium text-zinc-400 pt-0.5;
+}

@@ -1,0 +1,121 @@
+@reference "../../../index.css";
+
+.container {
+  @apply rounded-2xl border border-zinc-800 bg-zinc-900 p-5 space-y-6 shadow-sm;
+}
+
+.title {
+  @apply text-sm font-semibold text-zinc-100 tracking-tight;
+}
+
+.row {
+  @apply flex items-center justify-between border-b border-zinc-800/60 pb-4;
+}
+
+.rowInfo {
+  @apply flex items-center gap-2.5;
+}
+
+.iconWrapper {
+  @apply flex h-9 w-9 items-center justify-center rounded-xl border;
+}
+
+.iconCoffee {
+  @apply bg-amber-500/10 text-amber-400 border-amber-500/20;
+}
+
+.iconWater {
+  @apply bg-blue-500/10 text-blue-400 border-blue-500/20;
+}
+
+.rowTitle {
+  @apply text-xs font-semibold text-zinc-200;
+}
+
+.rowSubtitle {
+  @apply text-[10px] font-medium text-zinc-400;
+}
+
+.controlGroup {
+  @apply flex items-center gap-3 bg-zinc-950 p-1 rounded-xl border border-zinc-800;
+}
+
+.controlButton {
+  @apply flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-800 text-zinc-300 active:scale-90 border border-zinc-700;
+}
+
+.controlValue {
+  @apply w-6 text-center font-mono text-sm font-bold text-zinc-100;
+}
+
+.sleepSection {
+  @apply space-y-3 border-b border-zinc-800/60 pb-4;
+}
+
+.sleepHeader {
+  @apply flex items-center justify-between;
+}
+
+.sleepTitleGroup {
+  @apply flex items-center gap-2 text-xs font-semibold text-zinc-200;
+}
+
+.durationBadge {
+  @apply flex items-center gap-1 text-[11px] font-mono font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-md;
+}
+
+.sleepGrid {
+  @apply grid grid-cols-2 gap-4;
+}
+
+.fieldGroup {
+  @apply space-y-1.5;
+}
+
+.fieldLabel {
+  @apply text-[10px] font-semibold text-zinc-400 uppercase tracking-wider;
+}
+
+.timeInputWrapper {
+  @apply relative flex items-center bg-zinc-950 border border-zinc-800 rounded-xl focus-within:border-indigo-500/50 pr-1 transition-colors;
+}
+
+.timeInput {
+  @apply w-full text-center font-mono text-sm font-bold bg-transparent py-2.5 pl-7 text-zinc-100 outline-none;
+}
+
+.stepperGroup {
+  @apply flex flex-col text-zinc-400;
+}
+
+.stepperButton {
+  @apply p-0.5 hover:text-zinc-100 active:scale-75;
+}
+
+.qualitySection {
+  @apply space-y-2 border-b border-zinc-800/60 pb-4;
+}
+
+.ratingGroup {
+  @apply flex justify-between gap-1.5;
+}
+
+.ratingButton {
+  @apply flex-1 py-2 text-xs font-bold rounded-xl transition-all border active:scale-95 shadow-sm;
+}
+
+.qualityActive {
+  @apply bg-indigo-500 text-zinc-950 border-indigo-500 shadow-md shadow-indigo-500/20;
+}
+
+.energyActive {
+  @apply bg-cyan-400 text-zinc-950 border-cyan-400 shadow-md shadow-cyan-400/20;
+}
+
+.ratingInactive {
+  @apply bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-zinc-200;
+}
+
+.energySection {
+  @apply space-y-2;
+}

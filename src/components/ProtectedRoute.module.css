@@ -1,0 +1,9 @@
+@reference "../index.css";
+
+.loadingContainer {
+  @apply flex h-screen w-screen items-center justify-center bg-zinc-950 text-zinc-400;
+}
+
+.spinner {
+  @apply h-6 w-6 animate-spin rounded-full border-2 border-zinc-700 border-t-emerald-500;
+}

@@ -1,0 +1,9 @@
+@reference "../../index.css";
+
+.container {
+  @apply space-y-10;
+}
+
+.divider {
+  @apply border-zinc-900/60 my-2;
+}

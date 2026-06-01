@@ -3,6 +3,7 @@ import { useLiftingHistory, useStrongLiftsEngine, useLogWorkout } from './hooks'
 import { WorkoutSetup } from './components/WorkoutSetup';
 import { ActiveWorkout } from './components/ActiveWorkout';
 import { LiftingCharts } from './components/LiftingCharts';
+import styles from './LiftingModule.module.css';
 
 export function LiftingModule() {
   const { data: history, isLoading: historyLoading } = useLiftingHistory();
@@ -25,7 +26,7 @@ export function LiftingModule() {
   };
 
   return (
-    <div className="space-y-10">
+    <div className={styles.container}>
       {workoutIsActive && engineSetup ? (
         <ActiveWorkout
           initialSession={engineSetup}
@@ -47,7 +48,7 @@ export function LiftingModule() {
             />
 
             {/* Visual Separation Divider */}
-            <hr className="border-zinc-900/60 my-2" />
+            <hr className={styles.divider} />
 
             {/* Bottom Component Section: Progression Charts visible on Scroll */}
             <LiftingCharts history={history || []} />

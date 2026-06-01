@@ -1,0 +1,85 @@
+@reference "../../../index.css";
+
+.container {
+  @apply rounded-2xl border border-zinc-800 bg-zinc-900 p-5 space-y-4 relative overflow-hidden shadow-sm;
+}
+
+.decoration {
+  @apply absolute -top-12 -right-12 h-24 w-24 rounded-full bg-emerald-500/5 blur-xl pointer-events-none;
+}
+
+.header {
+  @apply flex items-center justify-between;
+}
+
+.nameInput {
+  @apply bg-transparent font-semibold text-zinc-100 placeholder-zinc-500 outline-none text-sm w-2/3 border-b border-transparent focus:border-zinc-700 pb-0.5;
+}
+
+.resetButton {
+  @apply text-[10px] font-bold text-zinc-400 hover:text-zinc-200 flex items-center gap-1 transition-colors cursor-pointer;
+}
+
+.grid {
+  @apply grid grid-cols-3 gap-3;
+}
+
+.macroCard {
+  @apply rounded-xl border p-2 flex flex-col items-center justify-between min-h-[90px] transition-all;
+}
+
+.cardProtein {
+  @apply bg-zinc-950 border-zinc-800 focus-within:border-emerald-500/40;
+}
+
+.cardCarbs {
+  @apply bg-zinc-950 border-zinc-800 focus-within:border-cyan-500/40;
+}
+
+.cardFat {
+  @apply bg-zinc-950 border-zinc-800 focus-within:border-amber-500/40;
+}
+
+.macroLabel {
+  @apply text-[10px] font-bold uppercase tracking-wider text-zinc-400;
+}
+
+.inputBlock {
+  @apply flex items-baseline justify-center w-full max-w-[65px] px-1;
+}
+
+.macroInput {
+  @apply w-full text-center font-mono text-lg font-bold bg-transparent outline-none ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none;
+}
+
+.inputProtein {
+  @apply text-emerald-400;
+}
+
+.inputCarbs {
+  @apply text-cyan-400;
+}
+
+.inputFat {
+  @apply text-amber-400;
+}
+
+.unit {
+  @apply text-[10px] font-semibold text-zinc-500 ml-0.5 select-none;
+}
+
+.controlRow {
+  @apply flex items-center justify-between w-full gap-1 pt-1.5;
+}
+
+.controlBtn {
+  @apply flex h-6 w-6 items-center justify-center rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 active:scale-75 transition-transform;
+}
+
+.commitBtn {
+  @apply w-full flex h-11 items-center justify-between rounded-xl bg-emerald-500 text-zinc-950 px-4 text-xs font-bold shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 disabled:opacity-20 disabled:pointer-events-none active:scale-[0.99];
+}
+
+.commitKcal {
+  @apply font-mono tracking-wide;
+}

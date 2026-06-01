@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ActiveWorkoutSession } from '../types';
 import { ExerciseCard } from './ExerciseCard';
 import { Save, Trash2, Timer } from 'lucide-react';
+import styles from './ActiveWorkout.module.css';
 
 interface ActiveWorkoutProps {
   initialSession: ActiveWorkoutSession;
@@ -66,20 +67,20 @@ export function ActiveWorkout({ initialSession, onCancel, onSave, isSaving }: Ac
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className={styles.container}>
       {/* Absolute Header Sticky Diagnostics Bar */}
-      <div className="flex items-center justify-between border-b border-zinc-900 bg-zinc-950/80 py-2 backdrop-blur-md sticky top-0 z-10">
-        <div className="flex items-center gap-1.5 text-zinc-400">
-          <Timer className="h-4 w-4 text-emerald-400 animate-pulse" />
-          <span className="font-mono text-sm font-medium">{formatTime(seconds)}</span>
+      <div className={styles.stickyHeader}>
+        <div className={styles.timerGroup}>
+          <Timer className={styles.timerIcon} />
+          <span className={styles.timerText}>{formatTime(seconds)}</span>
         </div>
-        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 bg-zinc-900 px-2.5 py-1 rounded-md">
+        <span className={styles.statusBadge}>
           Workout {session.workout_type} Active
         </span>
       </div>
 
       {/* Primary Exercise Map Matrix */}
-      <div className="space-y-4">
+      <div className={styles.exerciseList}>
         {session.exercises.map((ex, exIdx) => (
           <ExerciseCard
             key={ex.exercise_name}
@@ -91,11 +92,11 @@ export function ActiveWorkout({ initialSession, onCancel, onSave, isSaving }: Ac
       </div>
 
       {/* Lower Termination Control Options */}
-      <div className="flex gap-3 pt-2">
+      <div className={styles.actionRow}>
         <button
           type="button"
           onClick={onCancel}
-          className="flex h-12 items-center justify-center gap-2 rounded-xl border border-zinc-900 bg-zinc-950 px-4 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/5 active:scale-95"
+          className={styles.cancelBtn}
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -103,10 +104,10 @@ export function ActiveWorkout({ initialSession, onCancel, onSave, isSaving }: Ac
           type="button"
           disabled={isSaving}
           onClick={() => onSave(session)}
-          className="flex-1 flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-semibold text-zinc-950 shadow-lg shadow-emerald-500/10 transition-all hover:bg-emerald-400 disabled:opacity-50 active:scale-[0.98]"
+          className={styles.saveBtn}
         >
           <Save className="h-4 w-4" />
-          <span>{isSaving ? 'Storing Lifts...' : 'Log Workout Completed'}</span>
+          <span>{isSaving ? 'Storing Lifts...' : 'Complete Workout'}</span>
         </button>
       </div>
     </div>
