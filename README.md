@@ -84,3 +84,27 @@ To update Supabase types run:
 ```bash
 npx supabase gen types typescript --project-id "bocnauzbkqtomnjvcxlq" > src/types/supabase.ts
 ```
+
+---
+
+## 💎 Code Quality & Automation
+
+The project employs a robust quality pipeline to ensure consistent styling, type safety, and error prevention.
+
+### Manual Commands
+
+You can run these commands manually to check the codebase:
+
+- **Type Checking:** `npm run typecheck` (Runs `tsc` without emitting files)
+- **Linting:** `npm run lint` (Runs ESLint with React-specific rules)
+- **Formatting:** `npm run format` (Runs Prettier project-wide)
+
+### Automated Pre-commit Pipeline
+
+We use **Husky** and **lint-staged** to automate quality checks. When you run `git commit`, the following sequence occurs automatically:
+
+1.  **Global Type Check:** A full TypeScript check (`npm run typecheck`) is executed across the whole project.
+2.  **Staged File Linting:** ESLint runs specifically on the files you've changed and will attempt to auto-fix issues.
+3.  **Staged File Formatting:** Prettier automatically formats your staged files to match the project style.
+
+**Note:** If the type check fails or any linting errors cannot be auto-fixed, the commit will be blocked. This prevents broken or messy code from entering the repository.

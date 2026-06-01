@@ -34,6 +34,6 @@ export default defineConfig([
       ...react.configs.flat.recommended.rules,
       ...react.configs.flat['jsx-runtime'].rules,
       'react/react-in-jsx-scope': 'off',
-    }
     },
-    ]);
+  },
+]);
