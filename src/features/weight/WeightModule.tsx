@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useWeightData } from './hooks';
 import { WeightChart } from './components/WeightChart';
 import { WeightLogModal } from './components/WeightLogModal';
+import { LifestyleScorecard } from '../lifestyle/components/LifestyleScorecard';
 import { Plus } from 'lucide-react';
 
 export function WeightModule() {
@@ -37,6 +38,12 @@ export function WeightModule() {
 
       {/* Main Chart System */}
       <WeightChart data={weights || []} />
+
+      {/* Visual Structural Rules Divider */}
+      <hr className="border-zinc-900/40 my-2" />
+
+      {/* Daily Lifestyle Dashboard Controls */}
+      <LifestyleScorecard />
 
       {/* Overlay Modal Layer */}
       <WeightLogModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />

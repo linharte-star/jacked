@@ -60,31 +60,37 @@ export type Database = {
       }
       lifestyle_logs: {
         Row: {
+          bedtime: string | null
           coffee_cups: number
           date: string
           energy_level: number | null
           id: number
-          sleep_hours: number
           sleep_quality: number | null
           user_id: string
+          wake_time: string | null
+          water_cups: number
         }
         Insert: {
+          bedtime?: string | null
           coffee_cups?: number
           date?: string
           energy_level?: number | null
           id?: never
-          sleep_hours?: number
           sleep_quality?: number | null
           user_id: string
+          wake_time?: string | null
+          water_cups?: number
         }
         Update: {
+          bedtime?: string | null
           coffee_cups?: number
           date?: string
           energy_level?: number | null
           id?: never
-          sleep_hours?: number
           sleep_quality?: number | null
           user_id?: string
+          wake_time?: string | null
+          water_cups?: number
         }
         Relationships: [
           {
