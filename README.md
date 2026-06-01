@@ -37,3 +37,8 @@ src/
 ├── App.tsx              # Application layout root & view-tab routing controller
 ├── main.tsx             # React DOM execution mount
 └── index.css            # Tailwind v4 compiled layout styles
+
+
+
+To update Supabase types run:
+"npx supabase gen types typescript --project-id "bocnauzbkqtomnjvcxlq" > src/types/supabase.ts"
