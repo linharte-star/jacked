@@ -70,7 +70,6 @@ export function WeightModule() {
       {/* 1. Command Center Section Header */}
       <div className="pl-0.5">
         <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Daily Entry Workspace</h4>
-        <p className="text-[11px] text-zinc-600 font-medium">Your centralized hub for immediate vitals updates.</p>
       </div>
 
       {/* 2. Seamless Inline Weight Capture Card */}
