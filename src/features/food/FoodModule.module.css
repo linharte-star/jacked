@@ -1,0 +1,53 @@
+@reference "../../index.css";
+
+.container {
+  @apply space-y-6 pb-12;
+}
+
+.section {
+  @apply space-y-3;
+}
+
+.header {
+  @apply flex items-center justify-between pl-0.5;
+}
+
+.headerText {
+  @apply text-xs font-semibold text-zinc-400 uppercase tracking-wider;
+}
+
+.editTargetsButton {
+  @apply text-xs font-bold text-zinc-400 hover:text-zinc-200 flex items-center gap-1.5 transition-colors cursor-pointer;
+}
+
+.ledgerHeader {
+  @apply text-xs font-semibold text-zinc-400 uppercase tracking-wider pl-0.5;
+}
+
+.ledgerList {
+  @apply space-y-1.5 max-h-[180px] overflow-y-auto pr-1;
+}
+
+.emptyLedger {
+  @apply text-center py-6 border border-dashed border-zinc-800 rounded-xl text-zinc-500 text-xs;
+}
+
+.ledgerItem {
+  @apply flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900 p-3 shadow-sm;
+}
+
+.itemTitle {
+  @apply text-xs font-semibold text-zinc-100;
+}
+
+.itemMacros {
+  @apply text-[10px] font-mono font-medium text-zinc-400 pt-0.5;
+}
+
+.itemCalories {
+  @apply font-mono text-xs font-bold text-zinc-300;
+}
+
+.deleteButton {
+  @apply text-zinc-500 hover:text-red-400 p-1 rounded-md transition-colors active:scale-90;
+}

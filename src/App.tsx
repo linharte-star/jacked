@@ -3,10 +3,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Dumbbell, LineChart, Apple, Zap } from 'lucide-react';
-import {AuthScreen} from './features/auth/AuthScreen';
+import { AuthScreen } from './features/auth/AuthScreen';
 import { WeightModule } from './features/weight/WeightModule';
 import { LiftingModule } from './features/lifting/LiftingModule';
 import { FoodModule } from './features/food/FoodModule';
+import styles from './App.module.css';
 
 // Initialize the caching engine for production data syncing
 const queryClient = new QueryClient({
@@ -27,52 +28,51 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ProtectedRoute fallback={<AuthScreen />}>
-          
           {/* Main Mobile Shell Layout */}
-          <div className="flex h-screen flex-col bg-zinc-950 text-zinc-50 selection:bg-emerald-500/30">
-            
+          <div className={styles.shell}>
             {/* View Container Area */}
-            <main className="flex-1 overflow-y-auto px-4 pt-4 pb-24 max-w-md mx-auto w-full">
-              {activeTab === 'dashboard' && <WeightModule />}
+            <main className={styles.main}>
+              {activeTab === 'dashboard' && (
+                <WeightModule onNavigateToLift={() => setActiveTab('lifting')} />
+              )}
               {activeTab === 'lifting' && <LiftingModule />}
               {activeTab === 'food' && <FoodModule />}
-              {activeTab === 'analytics' && <div className="animate-fade-in">Recharts Visualizations</div>}
+              {activeTab === 'analytics' && <div>Recharts Visualizations</div>}
             </main>
 
             {/* Mobile Bottom Navigation Bar (PWA Form Factor) */}
-            <nav className="fixed bottom-0 left-0 right-0 border-t border-zinc-900 bg-zinc-950/80 backdrop-blur-md pb-safe">
-              <div className="mx-auto flex h-16 max-w-md items-center justify-around px-2">
-                <button 
+            <nav className={`pb-safe ${styles.nav}`}>
+              <div className={styles.navContainer}>
+                <button
                   onClick={() => setActiveTab('dashboard')}
-                  className={`flex flex-col items-center gap-1 text-xs transition-colors ${activeTab === 'dashboard' ? 'text-emerald-400' : 'text-zinc-500'}`}
+                  className={`${styles.navButton} ${activeTab === 'dashboard' ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
-                  <Zap className="h-5 w-5" />
+                  <Zap className={styles.navIcon} />
                   <span>Log</span>
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('lifting')}
-                  className={`flex flex-col items-center gap-1 text-xs transition-colors ${activeTab === 'lifting' ? 'text-emerald-400' : 'text-zinc-500'}`}
+                  className={`${styles.navButton} ${activeTab === 'lifting' ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
-                  <Dumbbell className="h-5 w-5" />
+                  <Dumbbell className={styles.navIcon} />
                   <span>Lift</span>
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('food')}
-                  className={`flex flex-col items-center gap-1 text-xs transition-colors ${activeTab === 'food' ? 'text-emerald-400' : 'text-zinc-500'}`}
+                  className={`${styles.navButton} ${activeTab === 'food' ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
-                  <Apple className="h-5 w-5" />
+                  <Apple className={styles.navIcon} />
                   <span>Food</span>
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('analytics')}
-                  className={`flex flex-col items-center gap-1 text-xs transition-colors ${activeTab === 'analytics' ? 'text-emerald-400' : 'text-zinc-500'}`}
+                  className={`${styles.navButton} ${activeTab === 'analytics' ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
-                  <LineChart className="h-5 w-5" />
+                  <LineChart className={styles.navIcon} />
                   <span>Charts</span>
                 </button>
               </div>
             </nav>
-
           </div>
         </ProtectedRoute>
       </AuthProvider>

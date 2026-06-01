@@ -12,7 +12,7 @@ export function useLogWeight() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ weight, date }: { weight: number; date: string }) => 
+    mutationFn: ({ weight, date }: { weight: number; date: string }) =>
       weightApi.upsert(weight, date),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['weights'] });

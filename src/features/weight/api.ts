@@ -18,19 +18,22 @@ export const weightApi = {
   },
 
   async upsert(weight: number, date: string): Promise<void> {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error('Unauthenticated operation rejected');
 
-    const { error } = await supabase
-      .from('weight_logs')
-      .upsert({
+    const { error } = await supabase.from('weight_logs').upsert(
+      {
         user_id: user.id,
         weight,
         logged_at: date,
-      }, {
-        onConflict: 'user_id, logged_at'
-      });
+      },
+      {
+        onConflict: 'user_id, logged_at',
+      },
+    );
 
     if (error) throw new Error(error.message);
-  }
+  },
 };

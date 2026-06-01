@@ -26,13 +26,13 @@ export function WeightLogModal({ isOpen, onClose }: WeightLogModalProps) {
           setWeight('');
           onClose();
         },
-      }
+      },
     );
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-zinc-950/60 backdrop-blur-sm sm:items-center p-4">
-      <div className="w-full max-w-sm rounded-t-2xl border border-zinc-900 bg-zinc-900 p-6 shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-200 sm:rounded-2xl">
+      <div className="w-full max-w-sm rounded-t-2xl border border-zinc-900 bg-zinc-900 p-6 shadow-xl sm:rounded-2xl">
         <div className="flex items-center justify-between pb-4">
           <h3 className="text-lg font-semibold text-zinc-50">Record Weight</h3>
           <button onClick={onClose} className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-800">

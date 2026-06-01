@@ -1,40 +1,68 @@
 import { useState, useEffect } from 'react';
 import { useWeightData } from './hooks';
+import { useFoodData } from '../food/hooks';
+import { useLiftingHistory, useStrongLiftsEngine } from '../lifting/hooks';
 import { supabase } from '../../lib/supabase';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { LifestyleScorecard } from '../lifestyle/components/LifestyleScorecard';
-import { Scale, CheckCircle2, RefreshCw } from 'lucide-react';
+import { MacroProgress } from '../food/components/MacroProgress';
+import { Scale, CheckCircle2, RefreshCw, Dumbbell, ChevronRight } from 'lucide-react';
+import styles from './WeightModule.module.css';
 
-export function WeightModule() {
+interface WeightModuleProps {
+  onNavigateToLift?: () => void;
+}
+
+export function WeightModule({ onNavigateToLift }: WeightModuleProps) {
   const queryClient = useQueryClient();
   const today = new Date().toISOString().split('T')[0];
-  
-  const { data: weights, isLoading, error } = useWeightData();
+
+  // 1. Core Module Data Hooks
+  const { data: weights, isLoading: weightLoading, error: weightError } = useWeightData();
+  const { targets, logs: foodLogs, isLoading: foodLoading } = useFoodData();
+  const { data: liftingHistory, isLoading: liftingLoading } = useLiftingHistory();
+  const { data: nextWorkout, isLoading: engineLoading } = useStrongLiftsEngine(liftingHistory);
+
   const [weightInput, setWeightInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
   // Extract today's raw logged entry if it exists in your timeline array
-  const todayLog = weights?.find(w => w.logged_at === today);
+  const todayLog = weights?.find((w) => w.logged_at === today);
 
   useEffect(() => {
     if (todayLog) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setWeightInput(todayLog.weight.toString());
     } else {
       setWeightInput('');
     }
   }, [todayLog]);
 
+  // Derived Food Metrics
+  const foodTotals = foodLogs.reduce(
+    (acc, curr) => {
+      acc.protein += curr.protein;
+      acc.carbs += curr.carbs;
+      acc.fat += curr.fat;
+      acc.calories += curr.calories;
+      return acc;
+    },
+    { calories: 0, protein: 0, carbs: 0, fat: 0 },
+  );
+
   // Inline dynamic weight submission engine
   const saveWeightMutation = useMutation({
     mutationFn: async (weightVal: number) => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error('Unauthenticated weight write request');
 
       const { error } = await supabase
         .from('weight_logs')
         .upsert(
           { user_id: user.id, logged_at: today, weight: weightVal },
-          { onConflict: 'user_id, logged_at' }
+          { onConflict: 'user_id, logged_at' },
         );
 
       if (error) throw new Error(error.message);
@@ -42,7 +70,7 @@ export function WeightModule() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['weightData'] });
       setIsSaving(false);
-    }
+    },
   });
 
   const handleWeightBlur = () => {
@@ -61,62 +89,96 @@ export function WeightModule() {
     }
   };
 
-  if (isLoading) return <div className="text-zinc-500 text-xs text-center py-12 font-mono">Syncing central logging hub...</div>;
-  if (error) return <div className="text-red-400 text-xs text-center py-12">Connection fault: {error.message}</div>;
+  if (weightLoading || foodLoading || liftingLoading || engineLoading) {
+    return (
+      <div className="text-zinc-500 text-xs text-center py-12 font-mono">
+        Syncing fitness cockpit...
+      </div>
+    );
+  }
+
+  if (weightError || !targets) {
+    return (
+      <div className="text-red-400 text-xs text-center py-12">
+        Connection fault syncing dashboard data.
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6 pb-12">
-      
-      {/* 1. Command Center Section Header */}
-      <div className="pl-0.5">
-        <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Daily Entry Workspace</h4>
-      </div>
+    <div className={styles.container}>
+      {/* 1. Energy Summary Integration (High Priority) */}
+      <MacroProgress targets={targets} totals={foodTotals} />
 
-      {/* 2. Seamless Inline Weight Capture Card */}
-      <div className="rounded-2xl border border-zinc-900 bg-zinc-900/10 p-4 backdrop-blur-md flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-xl transition-colors
-            ${todayLog ? 'bg-emerald-500/10 text-emerald-400' : 'bg-zinc-900 text-zinc-500'}`}
-          >
-            <Scale className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-xs font-bold text-zinc-200">Morning Weight</p>
-            <p className="text-[10px] text-zinc-500">
-              {todayLog ? 'Logged successfully for today' : 'Awaiting scale metrics entry...'}
-            </p>
-          </div>
+      {/* 2. Weight Capture Integration */}
+      <div className={styles.section}>
+        <div className={styles.header}>
+          <h4 className={styles.headerText}>Daily Entry Workspace</h4>
         </div>
 
-        <div className="relative flex items-center bg-zinc-950 border border-zinc-900 rounded-xl px-2.5 max-w-[120px] focus-within:border-zinc-800">
-          <input
-            type="number"
-            step="0.1"
-            pattern="[0-9]*"
-            inputMode="decimal"
-            placeholder="000.0"
-            value={weightInput}
-            onChange={(e) => setWeightInput(e.target.value)}
-            onBlur={handleWeightBlur}
-            onKeyDown={handleKeyDown}
-            className="w-full bg-transparent text-right font-mono text-sm font-bold text-zinc-100 outline-none pr-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          />
-          <span className="text-[10px] font-bold text-zinc-600 select-none pr-1">lbs</span>
-          
-          {/* Reactive Status Spinner/Icon Indicators inside the slot */}
-          <div className="absolute left-2 text-zinc-600 pointer-events-none">
-            {isSaving ? (
-              <RefreshCw className="h-3 w-3 animate-spin text-emerald-400" />
-            ) : todayLog ? (
-              <CheckCircle2 className="h-3 w-3 text-emerald-500" />
-            ) : null}
+        <div className={styles.weightCard}>
+          <div className={styles.cardInfo}>
+            <div
+              className={`${styles.iconWrapper} ${todayLog ? styles.iconWrapperActive : styles.iconWrapperInactive}`}
+            >
+              <Scale className="h-5 w-5" />
+            </div>
+            <div>
+              <p className={styles.cardTitle}>Morning Weight</p>
+              <p className={styles.cardSubtitle}>
+                {todayLog ? 'Logged successfully for today' : 'Awaiting scale metrics entry...'}
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.inputGroup}>
+            <input
+              type="number"
+              step="0.1"
+              pattern="[0-9]*"
+              inputMode="decimal"
+              placeholder="000.0"
+              value={weightInput}
+              onChange={(e) => setWeightInput(e.target.value)}
+              onBlur={handleWeightBlur}
+              onKeyDown={handleKeyDown}
+              className={styles.weightInput}
+            />
+            <span className={styles.unitLabel}>lbs</span>
+
+            <div className={styles.statusIndicator}>
+              {isSaving ? (
+                <RefreshCw className={`${styles.statusIcon} ${styles.loadingSpinner}`} />
+              ) : todayLog ? (
+                <CheckCircle2 className={`${styles.statusIcon} ${styles.successIcon}`} />
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* 3. Daily Vitals Card (Caffeine, Water, Sleep Timeline, Qualitatives) */}
-      <LifestyleScorecard />
+      {/* 3. Next Workout Integration (Compact Banner) */}
+      {nextWorkout && (
+        <button type="button" onClick={onNavigateToLift} className={styles.workoutBanner}>
+          <div className={styles.bannerInfo}>
+            <div className={styles.bannerIcon}>
+              <Dumbbell className="h-4.5 w-4.5" />
+            </div>
+            <div>
+              <p className={styles.bannerLabel}>Upcoming Session</p>
+              <p className={styles.bannerValue}>Workout {nextWorkout.workout_type}</p>
+            </div>
+          </div>
+          <div className={styles.bannerAction}>
+            <ChevronRight className="h-4 w-4" />
+          </div>
+        </button>
+      )}
 
+      {/* 4. Daily Vitals (Lifestyle) */}
+      <div className={styles.section}>
+        <LifestyleScorecard />
+      </div>
     </div>
   );
 }

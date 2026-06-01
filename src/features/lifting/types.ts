@@ -1,8 +1,8 @@
 export interface ActiveSet {
   sequence_order: number;
-  target_reps: number;   // Always 5
-  logged_reps: number;   // 0 to 5
-  is_completed: boolean; 
+  target_reps: number; // Always 5
+  logged_reps: number; // 0 to 5
+  is_completed: boolean;
 }
 
 export interface ActiveExercise {
@@ -15,4 +15,20 @@ export interface ActiveWorkoutSession {
   workout_type: 'A' | 'B';
   date: string;
   exercises: ActiveExercise[];
+}
+
+export interface SetLog {
+  reps: number;
+  weight: string | number;
+}
+
+export interface WorkoutExerciseHistoryItem {
+  exercise_name: string;
+  set_logs: SetLog[];
+}
+
+export interface WorkoutHistoryItem {
+  date: string;
+  notes?: string;
+  workout_exercises: WorkoutExerciseHistoryItem[];
 }

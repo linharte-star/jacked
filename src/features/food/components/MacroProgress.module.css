@@ -1,0 +1,81 @@
+@reference "../../../index.css";
+
+.card {
+  @apply rounded-2xl border border-zinc-800 bg-zinc-900 p-5 space-y-5 shadow-sm;
+}
+
+.summary {
+  @apply flex items-center justify-between;
+}
+
+.summaryHeader {
+  @apply text-sm font-medium text-zinc-300;
+}
+
+.summaryValue {
+  @apply text-3xl font-bold tracking-tight text-zinc-50;
+}
+
+.summaryTarget {
+  @apply text-xs font-semibold text-zinc-400;
+}
+
+.remainingLabel {
+  @apply text-[10px] font-bold text-zinc-400 uppercase tracking-wider block;
+}
+
+.remainingValue {
+  @apply text-sm font-bold font-mono;
+}
+
+.remainingPositive {
+  @apply text-emerald-400;
+}
+
+.remainingNegative {
+  @apply text-red-400;
+}
+
+.trackList {
+  @apply space-y-3.5;
+}
+
+.trackItem {
+  @apply space-y-1;
+}
+
+.trackHeader {
+  @apply flex justify-between text-xs;
+}
+
+.trackLabel {
+  @apply font-semibold text-zinc-200;
+}
+
+.trackStats {
+  @apply font-mono font-medium text-zinc-300;
+}
+
+.trackTarget {
+  @apply text-zinc-500;
+}
+
+.progressBar {
+  @apply h-2 w-full bg-zinc-950 rounded-full overflow-hidden border border-zinc-800;
+}
+
+.progressFill {
+  @apply h-full rounded-full transition-all duration-300;
+}
+
+.fillProtein {
+  @apply bg-emerald-500;
+}
+
+.fillCarbs {
+  @apply bg-cyan-400;
+}
+
+.fillFat {
+  @apply bg-amber-500;
+}

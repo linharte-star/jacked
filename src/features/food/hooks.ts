@@ -1,11 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { foodApi, FoodLogItem, FoodStaple } from './api';
+import { foodApi } from './api';
 
 export function useFoodData() {
   const today = new Date().toISOString().split('T')[0];
 
   const targetsQuery = useQuery({ queryKey: ['macroTargets'], queryFn: foodApi.fetchTargets });
-  const logsQuery = useQuery({ queryKey: ['foodLogs', today], queryFn: () => foodApi.fetchTodayLogs(today) });
+  const logsQuery = useQuery({
+    queryKey: ['foodLogs', today],
+    queryFn: () => foodApi.fetchTodayLogs(today),
+  });
   const staplesQuery = useQuery({ queryKey: ['foodStaples'], queryFn: foodApi.fetchStaples });
 
   return {
@@ -13,7 +16,7 @@ export function useFoodData() {
     logs: logsQuery.data || [],
     staples: staplesQuery.data || [],
     isLoading: targetsQuery.isLoading || logsQuery.isLoading || staplesQuery.isLoading,
-    error: targetsQuery.error || logsQuery.error || staplesQuery.error
+    error: targetsQuery.error || logsQuery.error || staplesQuery.error,
   };
 }
 
@@ -25,7 +28,7 @@ export function useLogFood() {
     mutationFn: foodApi.logFoodItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['foodLogs', today] });
-    }
+    },
   });
 }
 
@@ -36,7 +39,7 @@ export function useManageStaples() {
     mutationFn: foodApi.addStaplePreset,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['foodStaples'] });
-    }
+    },
   });
 }
 
@@ -48,7 +51,7 @@ export function useDeleteFoodItem() {
     mutationFn: foodApi.deleteFoodLogItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['foodLogs', today] });
-    }
+    },
   });
 }
 
@@ -60,7 +63,7 @@ export function useUpdateTargets() {
     onSuccess: () => {
       // Instantly forces progress bars to snap to new target bounds
       queryClient.invalidateQueries({ queryKey: ['macroTargets'] });
-    }
+    },
   });
 }
 
@@ -71,6 +74,6 @@ export function useDeleteStaple() {
     mutationFn: foodApi.deleteStaplePreset,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['foodStaples'] });
-    }
+    },
   });
 }

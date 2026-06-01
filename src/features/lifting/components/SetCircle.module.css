@@ -1,0 +1,13 @@
+@reference "../../../index.css";
+
+.circle {
+  @apply flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all font-mono text-sm font-bold active:scale-90 shadow-sm;
+}
+
+.active {
+  @apply bg-emerald-500 border-emerald-500 text-zinc-950 shadow-emerald-500/20;
+}
+
+.inactive {
+  @apply bg-zinc-950 border-zinc-800 text-zinc-600 hover:border-zinc-700;
+}

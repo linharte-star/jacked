@@ -1,0 +1,41 @@
+@reference "../../../index.css";
+
+.container {
+  @apply space-y-6 pb-12;
+}
+
+.stickyHeader {
+  @apply flex items-center justify-between border-b border-zinc-800 bg-zinc-950/95 py-3 backdrop-blur-md sticky top-0 z-10 transition-colors;
+}
+
+.timerGroup {
+  @apply flex items-center gap-1.5 text-zinc-300;
+}
+
+.timerIcon {
+  @apply h-4 w-4 text-emerald-400 animate-pulse;
+}
+
+.timerText {
+  @apply font-mono text-sm font-bold;
+}
+
+.statusBadge {
+  @apply text-[10px] font-bold uppercase tracking-wider text-zinc-400 bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded-md shadow-sm;
+}
+
+.exerciseList {
+  @apply space-y-4;
+}
+
+.actionRow {
+  @apply flex gap-3 pt-2;
+}
+
+.cancelBtn {
+  @apply flex h-12 items-center justify-center gap-2 rounded-xl border border-zinc-800 bg-zinc-950 px-4 text-sm font-medium text-red-400 transition-all hover:bg-red-500/10 active:scale-95 shadow-sm;
+}
+
+.saveBtn {
+  @apply flex-1 flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-bold text-zinc-950 shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 disabled:opacity-50 active:scale-[0.98];
+}

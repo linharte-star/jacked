@@ -3,18 +3,23 @@ import { useLiftingHistory, useStrongLiftsEngine, useLogWorkout } from './hooks'
 import { WorkoutSetup } from './components/WorkoutSetup';
 import { ActiveWorkout } from './components/ActiveWorkout';
 import { LiftingCharts } from './components/LiftingCharts';
+import styles from './LiftingModule.module.css';
 
 export function LiftingModule() {
   const { data: history, isLoading: historyLoading } = useLiftingHistory();
   const { data: engineSetup, isLoading: engineLoading } = useStrongLiftsEngine(history);
   const logWorkoutMutation = useLogWorkout();
 
-  const [workoutIsActive, setWorkoutIsActive] = useState(() => 
-    localStorage.getItem('active_workout_session') !== null
+  const [workoutIsActive, setWorkoutIsActive] = useState(
+    () => localStorage.getItem('active_workout_session') !== null,
   );
 
   if (historyLoading || engineLoading) {
-    return <div className="text-zinc-500 text-xs text-center py-12 font-mono">Parsing historical lifting patterns...</div>;
+    return (
+      <div className="text-zinc-500 text-xs text-center py-12 font-mono">
+        Parsing historical lifting patterns...
+      </div>
+    );
   }
 
   const handleCancel = () => {
@@ -25,7 +30,7 @@ export function LiftingModule() {
   };
 
   return (
-    <div className="space-y-10">
+    <div className={styles.container}>
       {workoutIsActive && engineSetup ? (
         <ActiveWorkout
           initialSession={engineSetup}
@@ -33,7 +38,7 @@ export function LiftingModule() {
           isSaving={logWorkoutMutation.isPending}
           onSave={(session) => {
             logWorkoutMutation.mutate(session, {
-              onSuccess: () => setWorkoutIsActive(false)
+              onSuccess: () => setWorkoutIsActive(false),
             });
           }}
         />
@@ -41,13 +46,10 @@ export function LiftingModule() {
         engineSetup && (
           <>
             {/* Top Component Section: Setup & Initialize Button */}
-            <WorkoutSetup
-              session={engineSetup}
-              onStart={() => setWorkoutIsActive(true)}
-            />
+            <WorkoutSetup session={engineSetup} onStart={() => setWorkoutIsActive(true)} />
 
             {/* Visual Separation Divider */}
-            <hr className="border-zinc-900/60 my-2" />
+            <hr className={styles.divider} />
 
             {/* Bottom Component Section: Progression Charts visible on Scroll */}
             <LiftingCharts history={history || []} />

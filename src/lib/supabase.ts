@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 import { createClient } from '@supabase/supabase-js';
-import type { Database } from '../types/supabase'; 
+import type { Database } from '../types/supabase';
 
 // TypeScript will now happily accept import.meta.env
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;

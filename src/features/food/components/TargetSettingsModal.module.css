@@ -1,0 +1,65 @@
+@reference "../../../index.css";
+
+.overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+}
+
+.backdrop {
+  @apply absolute inset-0 bg-zinc-950/60 backdrop-blur-sm;
+}
+
+.modal {
+  @apply relative w-full max-w-sm rounded-2xl border border-zinc-900 bg-zinc-950 p-6 shadow-2xl z-10;
+}
+
+.header {
+  @apply flex items-center justify-between pb-4;
+}
+
+.title {
+  @apply font-bold text-zinc-100 text-base;
+}
+
+.subtitle {
+  @apply text-[11px] text-zinc-500;
+}
+
+.closeBtn {
+  @apply rounded-lg p-1.5 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300 transition-colors;
+}
+
+.form {
+  @apply space-y-4;
+}
+
+.grid {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.field {
+  @apply space-y-1;
+}
+
+.label {
+  @apply text-[10px] font-semibold text-zinc-500 uppercase tracking-wider;
+}
+
+.inputWrapper {
+  @apply flex items-center bg-zinc-900/40 border border-zinc-900 rounded-xl px-3 focus-within:border-zinc-700;
+}
+
+.input {
+  @apply w-full text-sm font-bold font-mono bg-transparent py-2.5 text-zinc-200 outline-none;
+}
+
+.autoBtn {
+  @apply text-[9px] font-bold uppercase tracking-wide text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded ml-1 shrink-0 active:scale-95;
+}
+
+.basicInput {
+  @apply w-full text-sm font-bold font-mono rounded-xl border border-zinc-900 bg-zinc-900/40 px-3 py-2.5 text-zinc-200 outline-none focus:border-zinc-700;
+}
+
+.submitBtn {
+  @apply w-full flex h-11 items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-semibold text-zinc-950 shadow-lg shadow-emerald-500/10 transition-all hover:bg-emerald-400 disabled:opacity-50 active:scale-[0.99];
+}

@@ -1,10 +1,15 @@
+import { WorkoutHistoryItem, WorkoutExerciseHistoryItem, SetLog } from './types';
+
 export interface LiftChartPoint {
   date: string;
   formattedDate: string;
   weight: number;
 }
 
-export function parseLiftHistoryForChart(history: any[], exerciseName: string): LiftChartPoint[] {
+export function parseLiftHistoryForChart(
+  history: WorkoutHistoryItem[],
+  exerciseName: string,
+): LiftChartPoint[] {
   if (!history) return [];
 
   const points: LiftChartPoint[] = [];
@@ -14,7 +19,7 @@ export function parseLiftHistoryForChart(history: any[], exerciseName: string): 
 
   chronologicalHistory.forEach((workout) => {
     const exercise = workout.workout_exercises?.find(
-      (e: any) => e.exercise_name === exerciseName
+      (e: WorkoutExerciseHistoryItem) => e.exercise_name === exerciseName,
     );
 
     if (!exercise || !exercise.set_logs || exercise.set_logs.length === 0) return;
@@ -23,11 +28,12 @@ export function parseLiftHistoryForChart(history: any[], exerciseName: string): 
     const sets = exercise.set_logs;
 
     // A workout is strictly COMPLETED if all sets reached exactly 5 reps
-    const isCompleted = sets.length >= targetSetsCount && sets.every((s: any) => s.reps === 5);
+    const isCompleted = sets.length >= targetSetsCount && sets.every((s: SetLog) => s.reps === 5);
 
     if (isCompleted) {
-      const weight = parseFloat(sets[0].weight);
-      
+      const weight =
+        typeof sets[0].weight === 'string' ? parseFloat(sets[0].weight) : sets[0].weight;
+
       // Handle same-day double logging by updating to the highest weight entry
       const existingPointIdx = points.findIndex((p) => p.date === workout.date);
       if (existingPointIdx !== -1) {

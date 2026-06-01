@@ -2,10 +2,11 @@ import { supabase } from '../../lib/supabase';
 import type { ActiveWorkoutSession } from './types';
 
 export const liftingApi = {
-async fetchHistory() {
-  const { data, error } = await supabase
-    .from('workout_logs')
-    .select(`
+  async fetchHistory() {
+    const { data, error } = await supabase
+      .from('workout_logs')
+      .select(
+        `
       id,
       date,
       notes,
@@ -20,25 +21,28 @@ async fetchHistory() {
           sequence_order
         )
       )
-    `)
-    .order('date', { ascending: false })
-    .order('created_at', { ascending: false }); // 🔥 FIX: Ties are broken by the exact timestamp of creation
+    `,
+      )
+      .order('date', { ascending: false })
+      .order('created_at', { ascending: false }); // 🔥 FIX: Ties are broken by the exact timestamp of creation
 
-  if (error) throw new Error(error.message);
-  return data || [];
-},
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
 
   async saveWorkout(session: ActiveWorkoutSession): Promise<void> {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) throw new Error('Unauthenticated write operation');
 
     // 1. Insert Top-Level Workout Container
     const { data: workout, error: wError } = await supabase
       .from('workout_logs')
-      .insert({ 
-        user_id: user.id, 
-        date: session.date, 
-        notes: `StrongLifts 5x5 - Workout ${session.workout_type}` 
+      .insert({
+        user_id: user.id,
+        date: session.date,
+        notes: `StrongLifts 5x5 - Workout ${session.workout_type}`,
       })
       .select('id')
       .single();
@@ -50,10 +54,10 @@ async fetchHistory() {
       const ex = session.exercises[i];
       const { data: exercise, error: exError } = await supabase
         .from('workout_exercises')
-        .insert({ 
-          workout_id: workout.id, 
-          exercise_name: ex.exercise_name, 
-          sequence_order: i 
+        .insert({
+          workout_id: workout.id,
+          exercise_name: ex.exercise_name,
+          sequence_order: i,
         })
         .select('id')
         .single();
@@ -68,11 +72,9 @@ async fetchHistory() {
         sequence_order: s.sequence_order,
       }));
 
-      const { error: setsError } = await supabase
-        .from('set_logs')
-        .insert(setsToInsert);
+      const { error: setsError } = await supabase.from('set_logs').insert(setsToInsert);
 
       if (setsError) throw new Error(setsError.message);
     }
-  }
+  },
 };
