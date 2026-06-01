@@ -58,6 +58,44 @@ export type Database = {
           },
         ]
       }
+      food_staples: {
+        Row: {
+          carbs: number
+          created_at: string
+          fat: number
+          id: number
+          label: string
+          protein: number
+          user_id: string
+        }
+        Insert: {
+          carbs?: number
+          created_at?: string
+          fat?: number
+          id?: never
+          label: string
+          protein?: number
+          user_id: string
+        }
+        Update: {
+          carbs?: number
+          created_at?: string
+          fat?: number
+          id?: never
+          label?: string
+          protein?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "food_staples_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lifestyle_logs: {
         Row: {
           bedtime: string | null
@@ -107,18 +145,30 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          target_calories: number
+          target_carbs: number
+          target_fat: number
+          target_protein: number
           updated_at: string
         }
         Insert: {
           created_at?: string
           display_name?: string | null
           id: string
+          target_calories?: number
+          target_carbs?: number
+          target_fat?: number
+          target_protein?: number
           updated_at?: string
         }
         Update: {
           created_at?: string
           display_name?: string | null
           id?: string
+          target_calories?: number
+          target_carbs?: number
+          target_fat?: number
+          target_protein?: number
           updated_at?: string
         }
         Relationships: []

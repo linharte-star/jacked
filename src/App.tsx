@@ -6,6 +6,7 @@ import { Dumbbell, LineChart, Apple, Zap } from 'lucide-react';
 import {AuthScreen} from './features/auth/AuthScreen';
 import { WeightModule } from './features/weight/WeightModule';
 import { LiftingModule } from './features/lifting/LiftingModule';
+import { FoodModule } from './features/food/FoodModule';
 
 // Initialize the caching engine for production data syncing
 const queryClient = new QueryClient({
@@ -34,7 +35,7 @@ export default function App() {
             <main className="flex-1 overflow-y-auto px-4 pt-4 pb-24 max-w-md mx-auto w-full">
               {activeTab === 'dashboard' && <WeightModule />}
               {activeTab === 'lifting' && <LiftingModule />}
-              {activeTab === 'food' && <div className="animate-fade-in">Macro & Calorie Log</div>}
+              {activeTab === 'food' && <FoodModule />}
               {activeTab === 'analytics' && <div className="animate-fade-in">Recharts Visualizations</div>}
             </main>
 
