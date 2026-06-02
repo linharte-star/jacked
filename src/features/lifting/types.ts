@@ -18,17 +18,22 @@ export interface ActiveWorkoutSession {
 }
 
 export interface SetLog {
+  id: number;
   reps: number;
   weight: string | number;
+  sequence_order: number;
 }
 
 export interface WorkoutExerciseHistoryItem {
+  id: number;
   exercise_name: string;
+  sequence_order: number;
   set_logs: SetLog[];
 }
 
 export interface WorkoutHistoryItem {
+  id: number;
   date: string;
-  notes?: string;
+  notes: string | null;
   workout_exercises: WorkoutExerciseHistoryItem[];
 }

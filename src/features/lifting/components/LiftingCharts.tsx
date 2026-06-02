@@ -91,7 +91,10 @@ export function LiftingCharts({ history }: LiftingChartsProps) {
                 }}
                 labelStyle={{ color: '#f4f4f5', fontSize: '11px', fontWeight: 700 }}
                 itemStyle={{ fontSize: '12px', color: '#10b981', fontWeight: 600 }}
-                formatter={(value: string | number) => [`${value} lbs`, 'Load']}
+                formatter={(value: string | number | undefined) => [
+                  value ? `${value} lbs` : '0 lbs',
+                  'Load',
+                ]}
               />
               <Line
                 type="monotone"
