@@ -77,3 +77,12 @@ export function useDeleteStaple() {
     },
   });
 }
+
+export function useSearchGlobalFoods(searchTerm: string) {
+  return useQuery({
+    queryKey: ['globalFoodsSearch', searchTerm],
+    queryFn: () => foodApi.searchGlobalFoods(searchTerm),
+    enabled: searchTerm.trim().length >= 2, // Only trigger query if user types 2+ characters
+    staleTime: 1000 * 60 * 5, // Cache results for 5 minutes
+  });
+}

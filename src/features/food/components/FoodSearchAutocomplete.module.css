@@ -1,0 +1,53 @@
+@reference "../../../index.css";
+
+.autocompleteContainer {
+  @apply relative w-full;
+}
+
+.inputWrapper {
+  @apply relative flex items-center w-full border-b border-zinc-800/80 pb-1 focus-within:border-zinc-700 transition-colors;
+}
+
+.searchIcon {
+  @apply absolute left-0 h-4 w-4 text-zinc-600 pointer-events-none;
+}
+
+.searchInput {
+  @apply w-full bg-transparent font-semibold text-zinc-100 placeholder-zinc-600 outline-none text-sm pl-6 pr-6;
+}
+
+.spinnerIcon {
+  @apply absolute right-0 h-3.5 w-3.5 text-zinc-500 animate-spin;
+}
+
+.dropdownOverlay {
+  @apply absolute left-0 right-0 top-full mt-2 max-h-60 overflow-y-auto rounded-xl border border-zinc-900 bg-zinc-950 p-1.5 shadow-xl z-50 space-y-0.5;
+}
+
+.statusMessage {
+  @apply text-center py-4 text-[11px] text-zinc-500 font-medium;
+}
+
+.dropdownItemButton {
+  @apply w-full flex items-center justify-between p-2.5 rounded-lg text-left transition-colors hover:bg-zinc-900/60 active:bg-zinc-900 cursor-pointer;
+}
+
+.itemMetaGroup {
+  @apply flex items-center gap-2 w-3/4 overflow-hidden;
+}
+
+.itemIcon {
+  @apply h-3.5 w-3.5 text-zinc-600 shrink-0;
+}
+
+.itemNameText {
+  @apply text-xs font-medium text-zinc-300 truncate;
+}
+
+.itemCaloriesBadge {
+  @apply font-mono text-[11px] font-bold text-zinc-400 shrink-0;
+}
+
+.perUnitText {
+  @apply text-[9px] text-zinc-600 font-sans font-normal;
+}

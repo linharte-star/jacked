@@ -10,6 +10,46 @@ export interface FoodLogItem {
   date: string;
 }
 
+export interface GlobalFood {
+  id: number;
+  food: string;
+  caloric_value: number;
+  fat: number;
+  saturated_fats: number;
+  monounaturated_fats: number; // Matches your custom Postgres DB schema spelling
+  polyunsaturated_fats: number;
+  carbohydrates: number;
+  sugars: number;
+  protein: number;
+  dietary_fiber: number;
+  cholesterol: number;
+  sodium: number;
+  water: number;
+  vitamin_a: number;
+  vitamin_b1: number;
+  vitamin_b11: number;
+  vitamin_b12: number;
+  vitamin_b2: number;
+  vitamin_b3: number;
+  vitamin_b5: number;
+  vitamin_b6: number;
+  vitamin_c: number;
+  vitamin_d: number;
+  vitamin_e: number;
+  vitamin_k: number;
+  calcium: number;
+  copper: number;
+  iron: number;
+  magnesium: number;
+  manganese: number;
+  phosphorus: number;
+  potassium: number;
+  selenium: number;
+  zinc: number;
+  nutrition_density: number;
+  is_brand_item: boolean;
+}
+
 export interface FoodStaple {
   id: number;
   label: string;
@@ -135,5 +175,18 @@ export const foodApi = {
     const { error } = await supabase.from('food_staples').delete().eq('id', id);
 
     if (error) throw new Error(error.message);
+  },
+
+  async searchGlobalFoods(searchTerm: string): Promise<GlobalFood[]> {
+    if (!searchTerm.trim()) return [];
+
+    const { data, error } = await supabase
+      .from('global_foods')
+      .select('*')
+      .ilike('food', `%${searchTerm}%`)
+      .limit(8);
+
+    if (error) throw new Error(error.message);
+    return (data as GlobalFood[]) || [];
   },
 };
