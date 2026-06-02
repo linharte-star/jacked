@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { foodApi } from './api';
 
 export function useFoodData() {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toLocaleDateString('sv');
 
   const targetsQuery = useQuery({ queryKey: ['macroTargets'], queryFn: foodApi.fetchTargets });
   const logsQuery = useQuery({
@@ -22,10 +22,22 @@ export function useFoodData() {
 
 export function useLogFood() {
   const queryClient = useQueryClient();
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toLocaleDateString('sv');
 
   return useMutation({
     mutationFn: foodApi.logFoodItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['foodLogs', today] });
+    },
+  });
+}
+
+export function useDeleteFoodItem() {
+  const queryClient = useQueryClient();
+  const today = new Date().toLocaleDateString('sv');
+
+  return useMutation({
+    mutationFn: foodApi.deleteFoodLogItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['foodLogs', today] });
     },
@@ -39,18 +51,6 @@ export function useManageStaples() {
     mutationFn: foodApi.addStaplePreset,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['foodStaples'] });
-    },
-  });
-}
-
-export function useDeleteFoodItem() {
-  const queryClient = useQueryClient();
-  const today = new Date().toISOString().split('T')[0];
-
-  return useMutation({
-    mutationFn: foodApi.deleteFoodLogItem,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['foodLogs', today] });
     },
   });
 }

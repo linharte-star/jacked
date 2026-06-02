@@ -131,7 +131,7 @@ function generateEmptySession(
 
   return {
     workout_type: type,
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toLocaleDateString('sv'),
     exercises,
   };
 }

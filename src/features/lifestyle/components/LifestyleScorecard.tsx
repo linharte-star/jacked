@@ -31,7 +31,7 @@ const formatIsoTo24h = (isoString: string | null): string => {
 };
 
 export function LifestyleScorecard() {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toLocaleDateString('sv');
 
   // Custom Habit Definition & Mutation Queries
   const { data: habitDefinitions, isLoading: habitsLoading } = useHabitDefinitions();
@@ -66,6 +66,15 @@ export function LifestyleScorecard() {
       setSleepQuality(dayLog.sleep_quality);
       setEnergyLevel(dayLog.energy_level);
       setCompletedHabitIds(dayLog.completed_habits || []);
+    } else {
+      // RESET STATE FOR NEW DAY
+      setCoffee(0);
+      setWater(0);
+      setBedtime24h('');
+      setWakeTime24h('');
+      setSleepQuality(null);
+      setEnergyLevel(null);
+      setCompletedHabitIds([]);
     }
   }
 
