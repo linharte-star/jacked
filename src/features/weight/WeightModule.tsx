@@ -68,7 +68,7 @@ export function WeightModule({ onNavigateToLift }: WeightModuleProps) {
       if (error) throw new Error(error.message);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['weightData'] });
+      queryClient.invalidateQueries({ queryKey: ['weights'] });
       setIsSaving(false);
     },
   });

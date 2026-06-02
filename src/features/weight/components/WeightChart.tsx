@@ -32,7 +32,6 @@ export function WeightChart({ data }: WeightChartProps) {
         formattedDate: new Date(item.logged_at + 'T00:00:00').toLocaleDateString(undefined, {
           month: 'short',
           day: 'numeric',
-          timeZone: 'UTC',
         }),
         trend: parseFloat(avg.toFixed(2)),
       };
@@ -40,6 +39,7 @@ export function WeightChart({ data }: WeightChartProps) {
 
     // 2. Filter data entries based on chosen timeframe
     const cutoffDate = new Date();
+    cutoffDate.setHours(0, 0, 0, 0);
     if (timeframe === '6M') cutoffDate.setMonth(cutoffDate.getMonth() - 6);
     if (timeframe === '1Y') cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
 

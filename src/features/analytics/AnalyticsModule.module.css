@@ -1,0 +1,17 @@
+@reference "../../index.css";
+
+.container {
+  @apply space-y-8 pb-12 px-4 pt-4;
+}
+
+.title {
+  @apply text-lg font-bold text-zinc-100;
+}
+
+.section {
+  @apply space-y-4;
+}
+
+.sectionTitle {
+  @apply text-xs font-semibold text-zinc-400 uppercase tracking-wider pl-0.5;
+}

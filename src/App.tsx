@@ -7,6 +7,7 @@ import { AuthScreen } from './features/auth/AuthScreen';
 import { WeightModule } from './features/weight/WeightModule';
 import { LiftingModule } from './features/lifting/LiftingModule';
 import { FoodModule } from './features/food/FoodModule';
+import { AnalyticsModule } from './features/analytics/AnalyticsModule';
 import styles from './App.module.css';
 
 // Initialize the caching engine for production data syncing
@@ -37,7 +38,7 @@ export default function App() {
               )}
               {activeTab === 'lifting' && <LiftingModule />}
               {activeTab === 'food' && <FoodModule />}
-              {activeTab === 'analytics' && <div>Recharts Visualizations</div>}
+              {activeTab === 'analytics' && <AnalyticsModule />}
             </main>
 
             {/* Mobile Bottom Navigation Bar (PWA Form Factor) */}
