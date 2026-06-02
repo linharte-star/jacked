@@ -18,3 +18,32 @@ export function useLogLifestyle() {
     },
   });
 }
+
+export function useHabitDefinitions() {
+  return useQuery({
+    queryKey: ['habitDefinitions'],
+    queryFn: lifestyleApi.fetchHabitDefinitions,
+  });
+}
+
+export function useCreateHabit() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: lifestyleApi.createHabitDefinition,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['habitDefinitions'] });
+    },
+  });
+}
+
+export function useDeleteHabit() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: lifestyleApi.deleteHabitDefinition,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['habitDefinitions'] });
+      // Invalidate current logs to remove deleted habits from completion arrays
+      queryClient.invalidateQueries({ queryKey: ['lifestyle'] });
+    },
+  });
+}

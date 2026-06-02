@@ -1,5 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useLifestyleData, useLogLifestyle } from '../hooks';
+import { useState } from 'react';
+import {
+  useLifestyleData,
+  useLogLifestyle,
+  useHabitDefinitions,
+  useCreateHabit,
+  useDeleteHabit,
+} from '../hooks';
 import {
   Coffee,
   Droplets,
@@ -10,41 +16,58 @@ import {
   Clock,
   ChevronUp,
   ChevronDown,
+  Circle,
+  CheckCircle2,
+  Trash2,
 } from 'lucide-react';
 import styles from './LifestyleScorecard.module.css';
 
+const formatIsoTo24h = (isoString: string | null): string => {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  const hrs = date.getHours().toString().padStart(2, '0');
+  const mins = date.getMinutes().toString().padStart(2, '0');
+  return `${hrs}:${mins}`;
+};
+
 export function LifestyleScorecard() {
   const today = new Date().toISOString().split('T')[0];
-  const { data: logs } = useLifestyleData(today, today);
+
+  // Custom Habit Definition & Mutation Queries
+  const { data: habitDefinitions, isLoading: habitsLoading } = useHabitDefinitions();
+  const createHabitMutation = useCreateHabit();
+  const deleteHabitMutation = useDeleteHabit();
+
+  const { data: logs, isLoading: logsLoading } = useLifestyleData(today, today);
   const logMutation = useLogLifestyle();
 
+  // Local Presentation States
+  const [newHabitLabel, setNewHabitLabel] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
   const [coffee, setCoffee] = useState(0);
   const [water, setWater] = useState(0);
   const [bedtime24h, setBedtime24h] = useState('');
   const [wakeTime24h, setWakeTime24h] = useState('');
   const [sleepQuality, setSleepQuality] = useState<number | null>(null);
   const [energyLevel, setEnergyLevel] = useState<number | null>(null);
+  const [completedHabitIds, setCompletedHabitIds] = useState<string[]>([]);
 
-  const formatIsoTo24h = (isoString: string | null): string => {
-    if (!isoString) return '';
-    const date = new Date(isoString);
-    const hrs = date.getHours().toString().padStart(2, '0');
-    const mins = date.getMinutes().toString().padStart(2, '0');
-    return `${hrs}:${mins}`;
-  };
+  // Keep track of the last logs we synced with local state
+  const [prevLogs, setPrevLogs] = useState(logs);
 
-  useEffect(() => {
+  if (logs !== prevLogs) {
+    setPrevLogs(logs);
     if (logs && logs.length > 0) {
       const dayLog = logs[0];
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCoffee(dayLog.coffee_cups);
       setWater(dayLog.water_cups);
       setBedtime24h(formatIsoTo24h(dayLog.bedtime));
       setWakeTime24h(formatIsoTo24h(dayLog.wake_time));
       setSleepQuality(dayLog.sleep_quality);
       setEnergyLevel(dayLog.energy_level);
+      setCompletedHabitIds(dayLog.completed_habits || []);
     }
-  }, [logs]);
+  }
 
   // Pure Time Calculation Layer
   const runSmartInference = (bedStr: string, wakeStr: string) => {
@@ -84,7 +107,6 @@ export function LifestyleScorecard() {
 
     let totalMins = hrs * 60 + mins + deltaMinutes;
 
-    // Handle midnight wrapping bounds
     if (totalMins < 0) totalMins += 1440;
     if (totalMins >= 1440) totalMins %= 1440;
 
@@ -106,6 +128,7 @@ export function LifestyleScorecard() {
       wake_time: wakeIso,
       sleep_quality: sleepQuality,
       energy_level: energyLevel,
+      completed_habits: completedHabitIds,
     });
   };
 
@@ -123,7 +146,6 @@ export function LifestyleScorecard() {
       targetWake = nextWake;
     }
 
-    // Fire off immediate clean database upsert with fresh calculated time values
     const { bedIso, wakeIso } = runSmartInference(targetBed, targetWake);
     logMutation.mutate({
       date: today,
@@ -133,6 +155,7 @@ export function LifestyleScorecard() {
       wake_time: wakeIso,
       sleep_quality: sleepQuality,
       energy_level: energyLevel,
+      completed_habits: completedHabitIds,
     });
   };
 
@@ -141,6 +164,7 @@ export function LifestyleScorecard() {
     water?: number;
     quality?: number | null;
     energy?: number | null;
+    habitsList?: string[];
   }) => {
     const { bedIso, wakeIso } = runSmartInference(bedtime24h, wakeTime24h);
     logMutation.mutate({
@@ -151,13 +175,124 @@ export function LifestyleScorecard() {
       wake_time: wakeIso,
       sleep_quality: updates.quality !== undefined ? updates.quality : sleepQuality,
       energy_level: updates.energy !== undefined ? updates.energy : energyLevel,
+      completed_habits: updates.habitsList !== undefined ? updates.habitsList : completedHabitIds,
     });
   };
+
+  // Checklist Array Mutation Router
+  const handleToggleHabit = (idString: string) => {
+    const nextList = completedHabitIds.includes(idString)
+      ? completedHabitIds.filter((id) => id !== idString)
+      : [...completedHabitIds, idString];
+    setCompletedHabitIds(nextList);
+    saveQuickMetric({ habitsList: nextList });
+  };
+
+  const handleAddHabitSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newHabitLabel.trim()) return;
+    createHabitMutation.mutate(newHabitLabel.trim(), {
+      onSuccess: () => {
+        setNewHabitLabel('');
+        setIsAdding(false);
+      },
+    });
+  };
+
+  if (habitsLoading || logsLoading) {
+    return (
+      <div className="text-zinc-500 text-xs text-center py-12 font-mono">
+        Opening check-in layout...
+      </div>
+    );
+  }
 
   const hoursSlept = runSmartInference(bedtime24h, wakeTime24h).duration;
 
   return (
     <div className={styles.container}>
+      {/* Dynamic Habit Tracker Checklist Section */}
+      <div className={styles.checklistSection}>
+        <div className={styles.checklistHeader}>
+          <h4 className={styles.checklistTitle}>Custom Checklist</h4>
+          <button
+            type="button"
+            onClick={() => setIsAdding(!isAdding)}
+            className={styles.addHabitButton}
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Add Item</span>
+          </button>
+        </div>
+
+        {isAdding && (
+          <form onSubmit={handleAddHabitSubmit} className={styles.addHabitForm}>
+            <input
+              type="text"
+              required
+              placeholder="Habit name (e.g., Read 10 pages)"
+              value={newHabitLabel}
+              onChange={(e) => setNewHabitLabel(e.target.value)}
+              className={styles.habitInput}
+            />
+            <button type="submit" className={styles.habitSubmitButton}>
+              Save
+            </button>
+          </form>
+        )}
+
+        <div className={styles.habitList}>
+          {habitDefinitions?.length === 0 ? (
+            <p className={styles.emptyChecklist}>
+              No items found. Tap &quot;Add Item&quot; to initialize habits.
+            </p>
+          ) : (
+            habitDefinitions?.map((habit) => {
+              const strId = habit.id.toString();
+              const isChecked = completedHabitIds.includes(strId);
+              return (
+                <div key={habit.id} className={styles.habitItemRow}>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleHabit(strId)}
+                    className={`${styles.habitToggleButton} ${
+                      isChecked ? styles.habitToggleActive : styles.habitToggleInactive
+                    }`}
+                  >
+                    <span
+                      className={`${styles.habitText} ${isChecked ? styles.habitTextChecked : ''}`}
+                    >
+                      {habit.label}
+                    </span>
+                    {isChecked ? (
+                      <CheckCircle2 className="h-4 w-4 stroke-[2.5]" />
+                    ) : (
+                      <Circle className="h-4 w-4 text-zinc-800 stroke-[2]" />
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (confirm(`Wipe "${habit.label}" from checklist library?`)) {
+                        deleteHabitMutation.mutate(habit.id);
+                      }
+                    }}
+                    className={styles.habitDeleteButton}
+                    title="Delete item permanently"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      <hr className="border-zinc-800/40 my-1" />
+
+      {/* Vitals Engine Fields */}
       <h3 className={styles.title}>Daily Vitals</h3>
 
       {/* 1. Caffeine Intake */}
@@ -236,7 +371,7 @@ export function LifestyleScorecard() {
         </div>
       </div>
 
-      {/* 3. Sleep Timeline with Integrated Control Steppers */}
+      {/* 3. Sleep Timeline */}
       <div className={styles.sleepSection}>
         <div className={styles.sleepHeader}>
           <div className={styles.sleepTitleGroup}>
@@ -252,7 +387,6 @@ export function LifestyleScorecard() {
         </div>
 
         <div className={styles.sleepGrid}>
-          {/* Bedtime Field Container */}
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Bedtime (24h)</label>
             <div className={`group ${styles.timeInputWrapper}`}>
@@ -285,7 +419,6 @@ export function LifestyleScorecard() {
             </div>
           </div>
 
-          {/* Wake Time Field Container */}
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Wake Time (24h)</label>
             <div className={`group ${styles.timeInputWrapper}`}>

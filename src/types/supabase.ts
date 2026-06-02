@@ -90,10 +90,40 @@ export type Database = {
           },
         ];
       };
+      habit_definitions: {
+        Row: {
+          created_at: string;
+          id: number;
+          label: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: never;
+          label: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: never;
+          label?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'habit_definitions_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       lifestyle_logs: {
         Row: {
           bedtime: string | null;
           coffee_cups: number;
+          completed_habits: string[];
           date: string;
           energy_level: number | null;
           id: number;
@@ -105,6 +135,7 @@ export type Database = {
         Insert: {
           bedtime?: string | null;
           coffee_cups?: number;
+          completed_habits?: string[];
           date?: string;
           energy_level?: number | null;
           id?: never;
@@ -116,6 +147,7 @@ export type Database = {
         Update: {
           bedtime?: string | null;
           coffee_cups?: number;
+          completed_habits?: string[];
           date?: string;
           energy_level?: number | null;
           id?: never;

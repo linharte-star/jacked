@@ -9,6 +9,12 @@ export interface LifestyleLog {
   wake_time: string | null; // ISO Timestamps handled as strings via JSON
   sleep_quality: number | null;
   energy_level: number | null;
+  completed_habits: string[]; // Tracks completed habit definition IDs
+}
+
+export interface HabitDefinition {
+  id: number;
+  label: string;
 }
 
 export const lifestyleApi = {
@@ -33,6 +39,33 @@ export const lifestyleApi = {
     const { error } = await supabase
       .from('lifestyle_logs')
       .upsert({ user_id: user.id, ...log }, { onConflict: 'user_id, date' });
+
+    if (error) throw new Error(error.message);
+  },
+
+  async fetchHabitDefinitions(): Promise<HabitDefinition[]> {
+    const { data, error } = await supabase
+      .from('habit_definitions')
+      .select('id, label')
+      .order('created_at', { ascending: true });
+
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+
+  async createHabitDefinition(label: string): Promise<void> {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) throw new Error('Unauthenticated habit instantiation');
+
+    const { error } = await supabase.from('habit_definitions').insert({ user_id: user.id, label });
+
+    if (error) throw new Error(error.message);
+  },
+
+  async deleteHabitDefinition(id: number): Promise<void> {
+    const { error } = await supabase.from('habit_definitions').delete().eq('id', id);
 
     if (error) throw new Error(error.message);
   },
