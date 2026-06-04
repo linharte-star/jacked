@@ -9,6 +9,7 @@ import { LiftingModule } from './features/lifting/LiftingModule';
 import { FoodModule } from './features/food/FoodModule';
 import { AnalyticsModule } from './features/analytics/AnalyticsModule';
 import styles from './App.module.css';
+import { AppTab } from './types/types';
 
 // Initialize the caching engine for production data syncing
 const queryClient = new QueryClient({
@@ -20,10 +21,8 @@ const queryClient = new QueryClient({
   },
 });
 
-type Tab = 'dashboard' | 'lifting' | 'food' | 'analytics';
-
 export default function App() {
-  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
+  const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -33,41 +32,41 @@ export default function App() {
           <div className={styles.shell}>
             {/* View Container Area */}
             <main className={styles.main}>
-              {activeTab === 'dashboard' && (
-                <WeightModule onNavigateToLift={() => setActiveTab('lifting')} />
+              {activeTab === AppTab.DASHBOARD && (
+                <WeightModule onNavigateToLift={() => setActiveTab(AppTab.LIFTING)} />
               )}
-              {activeTab === 'lifting' && <LiftingModule />}
-              {activeTab === 'food' && <FoodModule />}
-              {activeTab === 'analytics' && <AnalyticsModule />}
+              {activeTab === AppTab.LIFTING && <LiftingModule />}
+              {activeTab === AppTab.FOOD && <FoodModule />}
+              {activeTab === AppTab.ANALYTICS && <AnalyticsModule />}
             </main>
 
             {/* Mobile Bottom Navigation Bar (PWA Form Factor) */}
             <nav className={`pb-safe ${styles.nav}`}>
               <div className={styles.navContainer}>
                 <button
-                  onClick={() => setActiveTab('dashboard')}
-                  className={`${styles.navButton} ${activeTab === 'dashboard' ? styles.navButtonActive : styles.navButtonInactive}`}
+                  onClick={() => setActiveTab(AppTab.DASHBOARD)}
+                  className={`${styles.navButton} ${activeTab === AppTab.DASHBOARD ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
                   <Zap className={styles.navIcon} />
                   <span>Log</span>
                 </button>
                 <button
-                  onClick={() => setActiveTab('lifting')}
-                  className={`${styles.navButton} ${activeTab === 'lifting' ? styles.navButtonActive : styles.navButtonInactive}`}
+                  onClick={() => setActiveTab(AppTab.LIFTING)}
+                  className={`${styles.navButton} ${activeTab === AppTab.LIFTING ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
                   <Dumbbell className={styles.navIcon} />
                   <span>Lift</span>
                 </button>
                 <button
-                  onClick={() => setActiveTab('food')}
-                  className={`${styles.navButton} ${activeTab === 'food' ? styles.navButtonActive : styles.navButtonInactive}`}
+                  onClick={() => setActiveTab(AppTab.FOOD)}
+                  className={`${styles.navButton} ${activeTab === AppTab.FOOD ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
                   <Apple className={styles.navIcon} />
                   <span>Food</span>
                 </button>
                 <button
-                  onClick={() => setActiveTab('analytics')}
-                  className={`${styles.navButton} ${activeTab === 'analytics' ? styles.navButtonActive : styles.navButtonInactive}`}
+                  onClick={() => setActiveTab(AppTab.ANALYTICS)}
+                  className={`${styles.navButton} ${activeTab === AppTab.ANALYTICS ? styles.navButtonActive : styles.navButtonInactive}`}
                 >
                   <LineChart className={styles.navIcon} />
                   <span>Charts</span>

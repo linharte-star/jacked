@@ -1,3 +1,5 @@
+import { WorkoutType } from '../../types/types';
+
 export interface ActiveSet {
   sequence_order: number;
   target_reps: number; // Always 5
@@ -12,7 +14,7 @@ export interface ActiveExercise {
 }
 
 export interface ActiveWorkoutSession {
-  workout_type: 'A' | 'B';
+  workout_type: WorkoutType;
   date: string;
   exercises: ActiveExercise[];
 }

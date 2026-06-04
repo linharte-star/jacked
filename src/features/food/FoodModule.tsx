@@ -13,6 +13,7 @@ import { StaplesBank } from './components/StaplesBank';
 import { TargetSettingsModal } from './components/TargetSettingsModal';
 import { Trash2, Settings } from 'lucide-react';
 import styles from './FoodModule.module.css';
+import { Macro } from '../../types/types';
 
 export function FoodModule() {
   const { targets, logs, staples, isLoading, error } = useFoodData();
@@ -61,18 +62,18 @@ export function FoodModule() {
   };
 
   // 🔥 Granular 1g stepper adjuster logic
-  const handleUpdateMacro = (macro: 'protein' | 'carbs' | 'fat', delta: number) => {
-    if (macro === 'protein') setScratchProtein((p) => Math.max(0, p + delta));
-    if (macro === 'carbs') setScratchCarbs((c) => Math.max(0, c + delta));
-    if (macro === 'fat') setScratchFat((f) => Math.max(0, f + delta));
+  const handleUpdateMacro = (macro: Macro, delta: number) => {
+    if (macro === Macro.PROTEIN) setScratchProtein((p) => Math.max(0, p + delta));
+    if (macro === Macro.CARBS) setScratchCarbs((c) => Math.max(0, c + delta));
+    if (macro === Macro.FAT) setScratchFat((f) => Math.max(0, f + delta));
   };
 
   // 🔥 Direct keypad keyboard absolute typewriter handler
-  const handleSetMacro = (macro: 'protein' | 'carbs' | 'fat', value: number) => {
+  const handleSetMacro = (macro: Macro, value: number) => {
     const sanitizedVal = Math.max(0, value);
-    if (macro === 'protein') setScratchProtein(sanitizedVal);
-    if (macro === 'carbs') setScratchCarbs(sanitizedVal);
-    if (macro === 'fat') setScratchFat(sanitizedVal);
+    if (macro === Macro.PROTEIN) setScratchProtein(sanitizedVal);
+    if (macro === Macro.CARBS) setScratchCarbs(sanitizedVal);
+    if (macro === Macro.FAT) setScratchFat(sanitizedVal);
   };
 
   const handleCommitLog = () => {

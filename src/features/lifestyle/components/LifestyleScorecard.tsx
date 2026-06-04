@@ -21,6 +21,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import styles from './LifestyleScorecard.module.css';
+import { SleepTimeType } from '../../../types/types';
 
 const formatIsoTo24h = (isoString: string | null): string => {
   if (!isoString) return '';
@@ -141,11 +142,11 @@ export function LifestyleScorecard() {
     });
   };
 
-  const handleTimeStepClick = (type: 'bed' | 'wake', delta: number) => {
+  const handleTimeStepClick = (type: SleepTimeType, delta: number) => {
     let targetBed = bedtime24h;
     let targetWake = wakeTime24h;
 
-    if (type === 'bed') {
+    if (type === SleepTimeType.BED) {
       const nextBed = calculateTimeStep(bedtime24h, delta, '22:00');
       setBedtime24h(nextBed);
       targetBed = nextBed;
@@ -412,14 +413,14 @@ export function LifestyleScorecard() {
               <div className={styles.stepperGroup}>
                 <button
                   type="button"
-                  onClick={() => handleTimeStepClick('bed', 15)}
+                  onClick={() => handleTimeStepClick(SleepTimeType.BED, 15)}
                   className={styles.stepperButton}
                 >
                   <ChevronUp className="h-4 w-4" />
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleTimeStepClick('bed', -15)}
+                  onClick={() => handleTimeStepClick(SleepTimeType.BED, -15)}
                   className={styles.stepperButton}
                 >
                   <ChevronDown className="h-4 w-4" />
@@ -444,14 +445,14 @@ export function LifestyleScorecard() {
               <div className={styles.stepperGroup}>
                 <button
                   type="button"
-                  onClick={() => handleTimeStepClick('wake', 15)}
+                  onClick={() => handleTimeStepClick(SleepTimeType.WAKE, 15)}
                   className={styles.stepperButton}
                 >
                   <ChevronUp className="h-4 w-4" />
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleTimeStepClick('wake', -15)}
+                  onClick={() => handleTimeStepClick(SleepTimeType.WAKE, -15)}
                   className={styles.stepperButton}
                 >
                   <ChevronDown className="h-4 w-4" />

@@ -9,15 +9,14 @@ import {
   CartesianGrid,
 } from 'recharts';
 import type { WeightLog } from '../api';
-
-type Timeframe = '6M' | '1Y' | 'ALL';
+import { Timeframe } from '../../../types/types';
 
 interface WeightChartProps {
   data: WeightLog[];
 }
 
 export function WeightChart({ data }: WeightChartProps) {
-  const [timeframe, setTimeframe] = useState<Timeframe>('6M');
+  const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe.SIX_MONTHS);
 
   const processedData = useMemo(() => {
     // 1. Calculate 7-Day Moving Average for Trendline
@@ -40,10 +39,10 @@ export function WeightChart({ data }: WeightChartProps) {
     // 2. Filter data entries based on chosen timeframe
     const cutoffDate = new Date();
     cutoffDate.setHours(0, 0, 0, 0);
-    if (timeframe === '6M') cutoffDate.setMonth(cutoffDate.getMonth() - 6);
-    if (timeframe === '1Y') cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
+    if (timeframe === Timeframe.SIX_MONTHS) cutoffDate.setMonth(cutoffDate.getMonth() - 6);
+    if (timeframe === Timeframe.ONE_YEAR) cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
 
-    if (timeframe === 'ALL') return enriched;
+    if (timeframe === Timeframe.ALL) return enriched;
     return enriched.filter((item) => new Date(item.logged_at + 'T00:00:00') >= cutoffDate);
   }, [data, timeframe]);
 
@@ -60,13 +59,13 @@ export function WeightChart({ data }: WeightChartProps) {
     <div className="space-y-4">
       {/* Timeframe Toggles */}
       <div className="flex justify-center bg-zinc-900 p-1 rounded-xl gap-1">
-        {(['6M', '1Y', 'ALL'] as Timeframe[]).map((t) => (
+        {[Timeframe.SIX_MONTHS, Timeframe.ONE_YEAR, Timeframe.ALL].map((t) => (
           <button
             key={t}
             onClick={() => setTimeframe(t)}
             className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-colors ${timeframe === t ? 'bg-zinc-800 text-emerald-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
           >
-            {t === 'ALL' ? 'All Time' : t === '1Y' ? '1 Year' : '6 Months'}
+            {t === Timeframe.ALL ? 'All Time' : t === Timeframe.ONE_YEAR ? '1 Year' : '6 Months'}
           </button>
         ))}
       </div>

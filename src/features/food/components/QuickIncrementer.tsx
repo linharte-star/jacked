@@ -1,23 +1,24 @@
 import { Plus, Minus } from 'lucide-react';
+import { Macro } from '../../../types/types';
 
 interface QuickIncrementerProps {
-  onIncrement: (macro: 'protein' | 'carbs' | 'fat', amount: number) => void;
+  onIncrement: (macro: Macro, amount: number) => void;
 }
 
 export function QuickIncrementer({ onIncrement }: QuickIncrementerProps) {
   const macrosConfig = [
     {
-      key: 'protein' as const,
+      key: Macro.PROTEIN,
       label: 'Protein Add',
       color: 'border-emerald-500/10 text-emerald-400 bg-emerald-500/5',
     },
     {
-      key: 'carbs' as const,
+      key: Macro.CARBS,
       label: 'Carbs Add',
       color: 'border-cyan-500/10 text-cyan-400 bg-cyan-500/5',
     },
     {
-      key: 'fat' as const,
+      key: Macro.FAT,
       label: 'Fat Add',
       color: 'border-amber-500/10 text-amber-400 bg-amber-500/5',
     },

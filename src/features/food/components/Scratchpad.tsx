@@ -3,6 +3,7 @@ import { Plus, Minus, ArrowUpRight, RotateCcw, Scale } from 'lucide-react';
 import { FoodSearchAutocomplete } from './FoodSearchAutocomplete';
 import { GlobalFood } from '../api';
 import styles from './Scratchpad.module.css';
+import { Macro } from '../../../types/types';
 
 interface ScratchpadProps {
   name: string;
@@ -10,8 +11,8 @@ interface ScratchpadProps {
   carbs: number;
   fat: number;
   onChangeName: (name: string) => void;
-  onUpdateMacro: (macro: 'protein' | 'carbs' | 'fat', delta: number) => void;
-  onSetMacro: (macro: 'protein' | 'carbs' | 'fat', value: number) => void;
+  onUpdateMacro: (macro: Macro, delta: number) => void;
+  onSetMacro: (macro: Macro, value: number) => void;
   onClear: () => void;
   onCommit: () => void;
   isPending: boolean;
@@ -55,9 +56,9 @@ export function Scratchpad({
     setIsRatioLocked(true);
     onChangeName(foodItem.food);
 
-    onSetMacro('protein', Math.round(foodItem.protein));
-    onSetMacro('carbs', Math.round(foodItem.carbohydrates));
-    onSetMacro('fat', Math.round(foodItem.fat));
+    onSetMacro(Macro.PROTEIN, Math.round(foodItem.protein));
+    onSetMacro(Macro.CARBS, Math.round(foodItem.carbohydrates));
+    onSetMacro(Macro.FAT, Math.round(foodItem.fat));
   };
 
   const handleWeightChange = (targetGrams: number) => {
@@ -66,9 +67,9 @@ export function Scratchpad({
 
     if (activeBaseFood && isRatioLocked) {
       const multiplier = sanitizedGrams / 100;
-      onSetMacro('protein', Math.round(activeBaseFood.protein * multiplier));
-      onSetMacro('carbs', Math.round(activeBaseFood.carbohydrates * multiplier));
-      onSetMacro('fat', Math.round(activeBaseFood.fat * multiplier));
+      onSetMacro(Macro.PROTEIN, Math.round(activeBaseFood.protein * multiplier));
+      onSetMacro(Macro.CARBS, Math.round(activeBaseFood.carbohydrates * multiplier));
+      onSetMacro(Macro.FAT, Math.round(activeBaseFood.fat * multiplier));
     }
   };
 
@@ -76,12 +77,12 @@ export function Scratchpad({
     handleWeightChange(weightGrams + delta);
   };
 
-  const interceptSetMacro = (macro: 'protein' | 'carbs' | 'fat', value: number) => {
+  const interceptSetMacro = (macro: Macro, value: number) => {
     if (activeBaseFood) setIsRatioLocked(false);
     onSetMacro(macro, value);
   };
 
-  const interceptUpdateMacro = (macro: 'protein' | 'carbs' | 'fat', delta: number) => {
+  const interceptUpdateMacro = (macro: Macro, delta: number) => {
     if (activeBaseFood) setIsRatioLocked(false);
     onUpdateMacro(macro, delta);
   };
@@ -158,21 +159,21 @@ export function Scratchpad({
       <div className={styles.grid}>
         {[
           {
-            key: 'protein' as const,
+            key: Macro.PROTEIN,
             label: 'Protein',
             val: protein,
             inputClass: styles.inputProtein,
             cardClass: styles.cardProtein,
           },
           {
-            key: 'carbs' as const,
+            key: Macro.CARBS,
             label: 'Carbs',
             val: carbs,
             inputClass: styles.inputCarbs,
             cardClass: styles.cardCarbs,
           },
           {
-            key: 'fat' as const,
+            key: Macro.FAT,
             label: 'Fats',
             val: fat,
             inputClass: styles.inputFat,

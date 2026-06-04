@@ -7,6 +7,7 @@ import type {
   WorkoutExerciseHistoryItem,
   SetLog,
 } from './types';
+import { WorkoutType } from '../../types/types';
 
 const DEFAULT_WEIGHTS: Record<string, number> = {
   Squat: 45,
@@ -29,12 +30,12 @@ export function useStrongLiftsEngine(history: WorkoutHistoryItem[] | undefined) 
     enabled: !!history,
     queryFn: (): ActiveWorkoutSession => {
       if (!history || history.length === 0) {
-        return generateEmptySession('A', DEFAULT_WEIGHTS);
+        return generateEmptySession(WorkoutType.A, DEFAULT_WEIGHTS);
       }
 
       // 1. Invert Workout Rotation
       const lastWorkoutNotes = history[0].notes || '';
-      const nextType = lastWorkoutNotes.includes('Workout A') ? 'B' : 'A';
+      const nextType = lastWorkoutNotes.includes('Workout A') ? WorkoutType.B : WorkoutType.A;
 
       // 2. Compute Progression State per Lift
       const targetWeights = { ...DEFAULT_WEIGHTS };
@@ -110,11 +111,11 @@ export function useLogWorkout() {
 }
 
 function generateEmptySession(
-  type: 'A' | 'B',
+  type: WorkoutType,
   weights: Record<string, number>,
 ): ActiveWorkoutSession {
   const lifts =
-    type === 'A'
+    type === WorkoutType.A
       ? ['Squat', 'Bench Press', 'Barbell Row']
       : ['Squat', 'Overhead Press', 'Deadlift'];
 
