@@ -30,14 +30,20 @@ export default function App() {
         <ProtectedRoute fallback={<AuthScreen />}>
           {/* Main Mobile Shell Layout */}
           <div className={styles.shell}>
-            {/* View Container Area */}
+            {/* View Container Area - Keep-Alive Pattern to preserve module state */}
             <main className={styles.main}>
-              {activeTab === AppTab.DASHBOARD && (
+              <div className={activeTab === AppTab.DASHBOARD ? 'contents' : 'hidden'}>
                 <WeightModule onNavigateToLift={() => setActiveTab(AppTab.LIFTING)} />
-              )}
-              {activeTab === AppTab.LIFTING && <LiftingModule />}
-              {activeTab === AppTab.FOOD && <FoodModule />}
-              {activeTab === AppTab.ANALYTICS && <AnalyticsModule />}
+              </div>
+              <div className={activeTab === AppTab.LIFTING ? 'contents' : 'hidden'}>
+                <LiftingModule />
+              </div>
+              <div className={activeTab === AppTab.FOOD ? 'contents' : 'hidden'}>
+                <FoodModule />
+              </div>
+              <div className={activeTab === AppTab.ANALYTICS ? 'contents' : 'hidden'}>
+                <AnalyticsModule />
+              </div>
             </main>
 
             {/* Mobile Bottom Navigation Bar (PWA Form Factor) */}
