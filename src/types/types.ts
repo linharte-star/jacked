@@ -1,28 +1,33 @@
-export enum AppTab {
-  DASHBOARD = 'dashboard',
-  LIFTING = 'lifting',
-  FOOD = 'food',
-  ANALYTICS = 'analytics',
-}
+export const AppTab = {
+  DASHBOARD: 'dashboard',
+  LIFTING: 'lifting',
+  FOOD: 'food',
+  ANALYTICS: 'analytics',
+} as const;
+export type AppTab = (typeof AppTab)[keyof typeof AppTab];
 
-export enum Macro {
-  PROTEIN = 'protein',
-  CARBS = 'carbs',
-  FAT = 'fat',
-}
+export const Macro = {
+  PROTEIN: 'protein',
+  CARBS: 'carbs',
+  FAT: 'fat',
+} as const;
+export type Macro = (typeof Macro)[keyof typeof Macro];
 
-export enum WorkoutType {
-  A = 'A',
-  B = 'B',
-}
+export const WorkoutType = {
+  A: 'A',
+  B: 'B',
+} as const;
+export type WorkoutType = (typeof WorkoutType)[keyof typeof WorkoutType];
 
-export enum Timeframe {
-  SIX_MONTHS = '6M',
-  ONE_YEAR = '1Y',
-  ALL = 'ALL',
-}
+export const Timeframe = {
+  SIX_MONTHS: '6M',
+  ONE_YEAR: '1Y',
+  ALL: 'ALL',
+} as const;
+export type Timeframe = (typeof Timeframe)[keyof typeof Timeframe];
 
-export enum SleepTimeType {
-  BED = 'bed',
-  WAKE = 'wake',
-}
+export const SleepTimeType = {
+  BED: 'bed',
+  WAKE: 'wake',
+} as const;
+export type SleepTimeType = (typeof SleepTimeType)[keyof typeof SleepTimeType];
